@@ -1,26 +1,47 @@
 ## This script will execute a query for every column on a table and output the results
 import trino
 import os
+from sqlalchemy import create_engine
+from trino.sqlalchemy import URL
+from sqlalchemy.sql.expression import select, text
+
+import threading
+import time
+
 import logging
 lg = logging
 lg.basicConfig(format='%(asctime)s %(levelname)-4s %(message)s', level=lg.INFO)
 import requests 
 requests.packages.urllib3.disable_warnings() #TLS verification failure suppression
 
-conn = trino.dbapi.connect(
-    host="ae34a34a332074136a033a3d4c3d3f42-1365266388.us-east-2.elb.amazonaws.com",
-    port=8443,
-    auth=trino.auth.BasicAuthentication("starburst_service", "StarburstR0cks!"), #User needs access to sysadmin role
-    http_scheme="https", 
-    verify=False,
-    roles={"system":"sysadmin"} #Only needed for biac
+
+# conn = trino.dbapi.connect(
+#     host="ae34a34a332074136a033a3d4c3d3f42-1365266388.us-east-2.elb.amazonaws.com",
+#     port=8443,
+#     auth=trino.auth.BasicAuthentication("starburst_service", "StarburstR0cks!"), #User needs access to sysadmin role
+#     http_scheme="https", 
+#     verify=False,
+#     roles={"system":"sysadmin"} #Only needed for biac
+# )
+
+engine = create_engine(
+    "trino://starburst_service@ae34a34a332074136a033a3d4c3d3f42-1365266388.us-east-2.elb.amazonaws.com:8443/hive",
+    connect_args={
+        "http_scheme": "https",
+        "auth": trino.auth.BasicAuthentication("starburst_service", "StarburstR0cks!"), #User needs access to sysadmin role
+        "http_scheme": "https", 
+        "verify": False
+        #roles: {"system":"sysadmin"} #Only needed for biac
+    },pool_size=10, max_overflow=0
 )
-lg.info('Attempting connection to host: ' + conn.http_scheme + '://' + conn.host + ':' + str(conn.port))
-cur = conn.cursor()
+
+# lg.info('Attempting connection to host: ' + engine.url + '://' + engine.url.host + ':' + str(engine.url.port))
+lg.info('Attempting connection to host: ' + str(engine.url))
+cur = engine.connect()
 query = "select * from hive.bootcamp.jcoer_broken"
 try:
     lg.info('Executing query: ' + query)
-    cur.execute(query)
+    cur.execute(text(query)).fetchall()
 except Exception as inst:
     lg.error(inst)
 

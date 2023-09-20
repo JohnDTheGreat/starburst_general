@@ -4,19 +4,18 @@ import os
 import getpass
 import sys
 import csv
-import concurrent.futures
+import math
 from sqlalchemy import create_engine
 from trino.sqlalchemy import URL
 from sqlalchemy.sql.expression import select, text
 from trino.auth import OAuth2Authentication
-
-
 import threading
 import time
 
 import logging
 lg = logging
-lg.basicConfig(format='%(asctime)s %(levelname)-4s %(message)s', level=lg.INFO)
+lg.basicConfig(format='%(asctime)s %(levelname)-4s %(threadName)s %(message)s', level=lg.INFO, filename='coercion_finders.log', filemode='w')
+
 import requests 
 requests.packages.urllib3.disable_warnings() #TLS verification failure suppression
 
@@ -61,10 +60,8 @@ def get_csv_file():
                 sys.exit("CSV file must have two columns {schema,table} , you supplied: " + str(len(row)))
     return csv_file
 
-# Function to read schema, table from csv file 
-# accepts catalog and csv file as arguments
-# appends catalog to schema and table to list
-def get_schema_table(csv_file, catalog):
+# Function to read schema, table from csv file and return list of tuples
+def get_schema_table(csv_file):
     with open(csv_file, newline='') as csvfile:
         creader = csv.reader(csvfile, delimiter=',', quotechar='"')
         next(creader, None)  # skip the headers
@@ -72,17 +69,19 @@ def get_schema_table(csv_file, catalog):
     return tuple_list
 
 # Function to seperate list into chunks using list comprehension
-def chunks(lst, n):
-    for i in range(0, len(lst), n):
-        yield lst[i:i + n]
+def chunks(lst, number_of_chunks):
+    step_size = math.ceil(len(lst) / number_of_chunks)
+    for i in range(0, len(lst), step_size):
+        yield lst[i:i + step_size]
 
 # Function that accepts catalog, schema, and table and returns full table name
 def get_full_table(catalog, schema, table):
     return catalog + "." + schema + "." + table
 
+
 # Function for creating a connection to Trino using SQLAlchemy that 
 # accepts arguments for host, port, catalog, username, and password
-def create_connection(host, port, catalog, username, password):
+def create_connection(host, port, catalog, username, password, poolsize):
     return create_engine(
         URL(
             host=host,
@@ -137,10 +136,19 @@ def get_columns(cur, catalog, schema, table):
     except Exception as inst:
         lg.error(inst)
 
+# Get columns test
+def get_columns_test(cur, catalog, schema, table):
+    query = "SELECT column_name FROM " + catalog + ".information_schema.columns \
+    where table_schema = '" + schema + "' and table_name = '" + table + "'"
+    full_table = get_full_table(catalog, schema, table)
+    lg.info('Executing query to gather columns: ' + query)
+    query = "SELECT test_column FROM " + full_table + " LIMIT 1"
+    lg.info('Executing query to test : ' + query)
+
 # Function accepting catalog and list of tuples containing schema and table calling get_columns
-def get_all_columns(cpool, catalog, full_table_list):
+def get_all_columns(cpool, catalog, table_list_chunks):
     cur = get_connection(cpool)
-    for i in full_table_list:
+    for i in table_list_chunks:
         get_columns(cur, catalog, i[0], i[1])
 
 # Create main function
@@ -155,20 +163,26 @@ def main():
     # csv_file = get_csv_file()
     # Hard code for testing
     username, password, catalog, host, port = "starburst_service", "StarburstR0cks!", "hive", "ae34a34a332074136a033a3d4c3d3f42-1365266388.us-east-2.elb.amazonaws.com", 8443
-    csv_file = "/Users/johndee.burks/Accounts/Sunlife/mismatch.csv"
+    csv_file = "/Users/johndee.burks/Accounts/Sunlife/test.csv"
     # Create connection
-    cpool = create_connection(host, port, catalog, username, password)
+    cpool = create_connection(host, port, catalog, username, password, 15)
     # Get connection
-    cur = get_connection(cpool)
+    #cur = get_connection(cpool)
     # Execute query
     # execute_query(cur, csv_file)
     # Get full table list
-    full_table_list = get_schema_table(csv_file, catalog)
-    print(full_table_list)
+    full_table_list = get_schema_table(csv_file)
+    #print(full_table_list)
     print(len(full_table_list))
-    for i in full_table_list:
-        #get_columns(cur, catalog, i[0], i[1])
-        print(i[0] + "." + i[1])
+    c = 0
+    for chunk in chunks(full_table_list, 10):
+        c = c + 1
+        threadname = str("Worker-" + str(c))
+        thread = threading.Thread(name = threadname, target=get_all_columns, args=(cpool, catalog, chunk))
+        thread.start()
+    # for i in full_table_list:
+    #     #get_columns(cur, catalog, i[0], i[1])
+    #     print(i[0] + "." + i[1])
     #catalog = "hive"
     # schema = "bootcamp"
     # table = "jcoer_broken"

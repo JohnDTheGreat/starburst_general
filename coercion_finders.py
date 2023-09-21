@@ -18,6 +18,9 @@ lg.basicConfig(format='%(asctime)s %(levelname)-4s %(threadName)s %(message)s', 
 import requests 
 requests.packages.urllib3.disable_warnings() #TLS verification failure suppression
 
+import warnings
+warnings.filterwarnings('ignore') #SQLAlchemy warnings suppression
+
 # Function to collect and verify the username and password
 def get_username_password():
     username = input("Username: ")
@@ -82,8 +85,8 @@ def get_full_table(catalog, schema, table):
 # accepts arguments for host, port, catalog, username, and password
 def create_connection(host, port, catalog, username, password, poolsize):
     lg.info('Connection pool created with the following parameters: host: ' + 
-            host + ' port: ' + port + ' catalog: ' + catalog + ' username: ' + 
-            username + ' password: ' + password + ' poolsize: ' + str(poolsize))
+            host + ' port: ' + str(port) + ' catalog: ' + catalog + ' username: ' + 
+            username + ' poolsize: ' + str(poolsize))
     return create_engine(
         URL(
             host=host,
@@ -121,8 +124,9 @@ def execute_query(cur, full_table):
 
 # Function to get all columns from a table and query each column collecting the exception or results
 def get_columns(cur, catalog, schema, table):
-    query = "SELECT column_name FROM " + catalog + ".information_schema.columns \
-    where table_schema = '" + schema + "' and table_name = '" + table + "'"
+    query = ("SELECT column_name FROM " + catalog + 
+             ".information_schema.columns where table_schema = '" 
+             + schema + "' and table_name = '" + table + "'")
     full_table = get_full_table(catalog, schema, table)
     try:
         lg.info('Executing query to gather columns: ' + query)
@@ -171,14 +175,6 @@ def get_dry_run():
 
 # Function getting all information
 def dry_run_true():
-    # # Hard code for testing
-    # username, password, catalog, host, port = "starburst_service", "StarburstR0cks!", "hive", "ae34a34a332074136a033a3d4c3d3f42-1365266388.us-east-2.elb.amazonaws.com", 8443
-    # csv_file = "/Users/johndee.burks/Accounts/Sunlife/test.csv"
-
-    print ("Dry run will NOT connect to cluster and " +
-            "will print test queries that would be executed into the log file: " 
-            + os.getcwd() + "/coercion_finders.log")
-    lg.info("Dry run started")
 
     # Get catalog
     catalog = get_catalog()
@@ -190,7 +186,12 @@ def dry_run_true():
     
     # Get full table list
     full_table_list = get_schema_table(csv_file)
-    
+
+    # Print starting message
+    print ("Staring coercion finder, this will take a while please review the log file: " 
+           + os.getcwd() + "/coercion_finders.log")
+    lg.info("Coercion finder started")
+
     # Initialize counter and threads list
     c = 0
     threads = [] 
@@ -212,6 +213,15 @@ def dry_run_true():
     print("Dry run complete")
 
 def dry_run_false():
+    
+    # # Hard code for testing
+    # username, password, catalog, host, port = ("starburst_service", 
+    #                                            "StarburstR0cks!", 
+    #                                            "hive", 
+    #                                            "ae34a34a332074136a033a3d4c3d3f42-1365266388.us-east-2.elb.amazonaws.com", 
+    #                                            8443)
+    # csv_file = "/Users/johndee.burks/Accounts/Sunlife/test.csv"
+
     # Get username and password
     username, password = get_username_password()
     
@@ -229,6 +239,11 @@ def dry_run_false():
     
     # Create connection pool
     cpool = create_connection(host, port, catalog, username, password, 15)
+
+    # Print starting message
+    print ("Staring coercion finder, this will take a while please review the log file: " 
+           + os.getcwd() + "/coercion_finders.log")
+    lg.info("Coercion finder started")
 
     # Initialize counter and threads list
     c = 0

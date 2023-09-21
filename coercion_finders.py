@@ -10,7 +10,6 @@ from trino.sqlalchemy import URL
 from sqlalchemy.sql.expression import select, text
 from trino.auth import OAuth2Authentication
 import threading
-import time
 
 import logging
 lg = logging
@@ -82,6 +81,9 @@ def get_full_table(catalog, schema, table):
 # Function for creating a connection to Trino using SQLAlchemy that 
 # accepts arguments for host, port, catalog, username, and password
 def create_connection(host, port, catalog, username, password, poolsize):
+    lg.info('Connection pool created with the following parameters: host: ' + 
+            host + ' port: ' + port + ' catalog: ' + catalog + ' username: ' + 
+            username + ' password: ' + password + ' poolsize: ' + str(poolsize))
     return create_engine(
         URL(
             host=host,
@@ -94,7 +96,7 @@ def create_connection(host, port, catalog, username, password, poolsize):
             "auth": trino.auth.BasicAuthentication(username, password),
             "verify": False
         },
-        pool_size=10, max_overflow=0 #Pool size and max overflow are optional
+        pool_size=poolsize, max_overflow=0 #Pool size and max overflow are optional
     )
 
 # Function to get connection from cpool and test
@@ -137,12 +139,12 @@ def get_columns(cur, catalog, schema, table):
         lg.error(inst)
 
 # Get columns test
-def get_columns_test(cur, catalog, schema, table):
-    query = "SELECT column_name FROM " + catalog + ".information_schema.columns \
-    where table_schema = '" + schema + "' and table_name = '" + table + "'"
+def get_columns_test(catalog, schema, table):
+    query = ("SELECT column_name FROM " + catalog + ".information_schema.columns " + 
+    "where table_schema = '" + schema + "' and table_name = '" + table + "'")
     full_table = get_full_table(catalog, schema, table)
     lg.info('Executing query to gather columns: ' + query)
-    query = "SELECT test_column FROM " + full_table + " LIMIT 1"
+    query = ("SELECT test_column FROM " + full_table + " LIMIT 1")
     lg.info('Executing query to test : ' + query)
 
 # Function accepting catalog and list of tuples containing schema and table calling get_columns
@@ -151,41 +153,91 @@ def get_all_columns(cpool, catalog, table_list_chunks):
     for i in table_list_chunks:
         get_columns(cur, catalog, i[0], i[1])
 
-# Create main function
-def main():
-    # Get username and password
-    # username, password = get_username_password()
-    # # Get host and port
-    # host, port = get_host_port()
-    # # Get catalog
-    # catalog = get_catalog()
-    # # Get csv file
-    # csv_file = get_csv_file()
-    # Hard code for testing
-    username, password, catalog, host, port = "starburst_service", "StarburstR0cks!", "hive", "ae34a34a332074136a033a3d4c3d3f42-1365266388.us-east-2.elb.amazonaws.com", 8443
-    csv_file = "/Users/johndee.burks/Accounts/Sunlife/test.csv"
-    # Create connection
-    cpool = create_connection(host, port, catalog, username, password, 15)
-    # Get connection
-    #cur = get_connection(cpool)
-    # Execute query
-    # execute_query(cur, csv_file)
+# Test get_all_columns for dry run
+def get_all_columns_test(catalog, table_list_chunks):
+    for i in table_list_chunks:
+        get_columns_test(catalog, i[0], i[1])
+
+# Function for gathering if this is dry run or not
+def get_dry_run():
+    dry_run = input("Dry Run? (y/n): ")
+    if dry_run == "y":
+        return True
+    elif dry_run == "n":
+        return False
+    else:
+        lg.info("Invalid input, assuming dry run")
+        return True
+
+# Function getting all information
+def dry_run_true():
+    # # Hard code for testing
+    # username, password, catalog, host, port = "starburst_service", "StarburstR0cks!", "hive", "ae34a34a332074136a033a3d4c3d3f42-1365266388.us-east-2.elb.amazonaws.com", 8443
+    # csv_file = "/Users/johndee.burks/Accounts/Sunlife/test.csv"
+
+    lg.info("Dry run will NOT connect to cluster and " +
+            "will print test queries that would be executed into the log file: " 
+            + os.getcwd() + "/coercion_finders.log")
+    # Get catalog
+    catalog = get_catalog()
+    #catalog = "hive"
+    # Get csv file
+    csv_file = get_csv_file()
+    #csv_file = "/Users/johndee.burks/Accounts/Sunlife/test.csv"
     # Get full table list
     full_table_list = get_schema_table(csv_file)
-    #print(full_table_list)
-    print(len(full_table_list))
-    c = 0
+    c = 0 # Counter for thread names
+    threads = []
     for chunk in chunks(full_table_list, 10):
         c = c + 1
         threadname = str("Worker-" + str(c))
-        thread = threading.Thread(name = threadname, target=get_all_columns, args=(cpool, catalog, chunk))
-        thread.start()
-    # for i in full_table_list:
-    #     #get_columns(cur, catalog, i[0], i[1])
-    #     print(i[0] + "." + i[1])
-    #catalog = "hive"
-    # schema = "bootcamp"
-    # table = "jcoer_broken"
+        threads.append(threading.Thread(name = threadname, target=get_all_columns_test, args=(catalog, chunk)))
+        lg.info("Starting thread: " + threadname)
+        threads[-1].start()
+    # Wait for all threads to complete
+    for t in threads:
+        lg.info("Waiting for thread: " + t.name + " to complete")
+        t.join()
+        lg.info("Thread: " + t.name + " complete")
+    lg.info("Dry run complete")
+    print("Dry run complete")
+
+def dry_run_false():
+    # Get username and password
+    username, password = get_username_password()
+    # Get host and port
+    host, port = get_host_port()
+    # Get catalog
+    catalog = get_catalog()
+    # Get csv file
+    csv_file = get_csv_file()
+    # Get full table list
+    full_table_list = get_schema_table(csv_file)
+    # Create connection pool
+    cpool = create_connection(host, port, catalog, username, password, 15)
+    threads = []
+    for chunk in chunks(full_table_list, 10):
+        c = c + 1
+        threadname = str("Worker-" + str(c))
+        threads.append(threading.Thread(name = threadname, target=get_all_columns, args=(cpool, catalog, chunk)))
+        lg.info("Starting thread: " + threadname)
+        threads[-1].start()
+    # Wait for all threads to complete
+    for t in threads:
+        lg.info("Waiting for thread: " + t.name + " to complete")
+        t.join()
+        lg.info("Thread: " + t.name + " complete")
+    lg.info("All queries complete")
+    print("All queries complete")
+
+
+# Create main function
+def main():
+    # If dry run do that and print all queries, if not dry run execute against cluster
+    if get_dry_run() == True:
+        dry_run_true()
+    else:
+        dry_run_false()
 
 main()
 
@@ -206,107 +258,3 @@ main()
 #         "verify": False
 #     }
 # )
-
-# engine = create_engine(
-#     URL(
-#         host="ae34a34a332074136a033a3d4c3d3f42-1365266388.us-east-2.elb.amazonaws.com",
-#         port=8443,
-#         catalog="hive",
-#         user="starburst_service"
-#     ),
-#     connect_args={
-#         "http_scheme": "https",
-#         "auth": trino.auth.BasicAuthentication("starburst_service", "StarburstR0cks!"), #User needs access to sysadmin role
-#         "verify": False
-#         #roles: {"system":"sysadmin"} #Only needed for biac
-#     },pool_size=10, max_overflow=0
-# )
-
-
-
-# query = "SELECT * FROM hive.bootcamp.jcoer_broken LIMIT 10"
-# try:
-#     lg.info('Executing query: ' + query)
-#     cur.execute(text(query)).fetchall()
-# except Exception as inst:
-#     lg.error(inst)
-
-
-# query = "SELECT column_name FROM " + catalog + ".information_schema.columns \
-# where table_schema = '" + schema + "' and table_name = '" + table + "'"
-# try:
-#     lg.info('Executing query: ' + query)
-#     res = cur.execute(text(query)).fetchall()
-#     for r in res:
-#         column = r[0]
-#         query = "SELECT " + column + " FROM hive.bootcamp.jcoer_broken LIMIT 1"
-#         try:
-#             lg.info('Executing query: ' + query)
-#             cur.execute(text(query)).fetchall()
-#         except Exception as inst:
-#             lg.error("Table: " + full_table + " Column: " + column + " Exception: " + str(inst))
-# except Exception as inst:
-#     lg.error(inst)
-
-# response = cur.fetchall()
-# print(response)
-
-# f = open("queries.sql", "r")
-
-# for q in f:
-#     print(q)
-
-# if len(sys.argv) > 1:
-#     arg = str(sys.argv[1])
-# else:
-#     sys.exit("need to supply argument usage: python3 trino_views_updater.py <trino_view_csv_file>")
-
-# if not os.path.exists(arg):
-#     sys.exit("need to supply valid filename, you supplied: " + arg)
-
-# f = open(arg)
-
-
-# interfile = str(f.name + ".intermediate")
-# finalfile = str(f.name + ".updated")
-# originalfile = str(f.name + ".original")
-# lg.info("Deleting old files: " + interfile + ", " + finalfile + ", " + originalfile)
-# if os.path.exists(interfile):
-#     os.remove(interfile)
-# if os.path.exists(finalfile):
-#     os.remove(finalfile)
-# if os.path.exists(originalfile):
-#     os.remove(originalfile)
-
-# lg.info("Creating new files: " + interfile + ", " + finalfile + ", " + originalfile)
-# ofile = open(interfile, "a")
-# ufile = open(finalfile, "a")
-# origfile = open(originalfile, "a")
-
-# lg.info("Performing trino csv correction")
-# for i in f:
-#     ir = i.replace('"""','"')
-#     ofile.writelines(ir)
-
-# lg.info("Writing unmodified ddls to: " + originalfile)
-# lg.info("Writing data to updated file: " + finalfile)
-# with open(interfile, newline='') as csvfile:
-#     creader = csv.reader(csvfile, delimiter=',', quotechar='"')
-#     next(creader, None)  # skip the headers
-#     for row in creader:
-#         ctlg = "pepsicodatalake_hive"
-#         schema = row[0]
-#         vname = row[1]
-#         oq = row[2]
-#         lq = oq.split('\\n')
-#         #qrep = [s.replace('CAST(','from_iso8601_timestamp(').replace(' AS timestamp)',')') if 'AS timestamp)' in s else s for s in lq]
-#         qrep = [s.replace('CAST(','cast(REPLACE(SUBSTRING(').replace(' AS timestamp)',", 1, 19), 'T', ' ') as timestamp)") if 'AS timestamp)' in s else s for s in lq]
-#         qrep2 = [x + "\n" if x not in '' else x for x in qrep]
-#         origrep = [x + "\n" if x not in '' else x for x in lq]
-#         origddl = str("CREATE OR REPLACE VIEW '" + ctlg + "'.'" + schema + "'.'" + vname + "' AS \n" + ''.join(origrep) + "; \n")
-#         uddl = str("CREATE OR REPLACE VIEW '" + ctlg + "'.'" + schema + "'.'" + vname + "' AS \n" + ''.join(qrep2) + "; \n")
-#         origfile.writelines(origddl)
-#         ufile.writelines(uddl)
-# lg.info("Finished")
-
-

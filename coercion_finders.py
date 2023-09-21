@@ -175,25 +175,34 @@ def dry_run_true():
     # username, password, catalog, host, port = "starburst_service", "StarburstR0cks!", "hive", "ae34a34a332074136a033a3d4c3d3f42-1365266388.us-east-2.elb.amazonaws.com", 8443
     # csv_file = "/Users/johndee.burks/Accounts/Sunlife/test.csv"
 
-    lg.info("Dry run will NOT connect to cluster and " +
+    print ("Dry run will NOT connect to cluster and " +
             "will print test queries that would be executed into the log file: " 
             + os.getcwd() + "/coercion_finders.log")
+    lg.info("Dry run started")
+
     # Get catalog
     catalog = get_catalog()
     #catalog = "hive"
+
     # Get csv file
     csv_file = get_csv_file()
     #csv_file = "/Users/johndee.burks/Accounts/Sunlife/test.csv"
+    
     # Get full table list
     full_table_list = get_schema_table(csv_file)
-    c = 0 # Counter for thread names
-    threads = []
+    
+    # Initialize counter and threads list
+    c = 0
+    threads = [] 
+
+    # Create threads
     for chunk in chunks(full_table_list, 10):
         c = c + 1
         threadname = str("Worker-" + str(c))
         threads.append(threading.Thread(name = threadname, target=get_all_columns_test, args=(catalog, chunk)))
         lg.info("Starting thread: " + threadname)
         threads[-1].start()
+
     # Wait for all threads to complete
     for t in threads:
         lg.info("Waiting for thread: " + t.name + " to complete")
@@ -205,23 +214,34 @@ def dry_run_true():
 def dry_run_false():
     # Get username and password
     username, password = get_username_password()
+    
     # Get host and port
     host, port = get_host_port()
+    
     # Get catalog
     catalog = get_catalog()
+    
     # Get csv file
     csv_file = get_csv_file()
+    
     # Get full table list
     full_table_list = get_schema_table(csv_file)
+    
     # Create connection pool
     cpool = create_connection(host, port, catalog, username, password, 15)
-    threads = []
+
+    # Initialize counter and threads list
+    c = 0
+    threads = [] 
+
+    # Create threads
     for chunk in chunks(full_table_list, 10):
         c = c + 1
         threadname = str("Worker-" + str(c))
         threads.append(threading.Thread(name = threadname, target=get_all_columns, args=(cpool, catalog, chunk)))
         lg.info("Starting thread: " + threadname)
         threads[-1].start()
+
     # Wait for all threads to complete
     for t in threads:
         lg.info("Waiting for thread: " + t.name + " to complete")

@@ -105,12 +105,12 @@ def create_connection(host, port, catalog, username, password, poolsize):
 # Function to get connection from cpool and test
 def get_connection(cpool):
     try:
-        lg.info('Attempting connection to host: ' + str(cpool.url))
+        lg.info('Attempting connection to url: ' + str(cpool.url))
         cur = cpool.connect()
         lg.info('Connection successful')
     except Exception as inst:
         lg.error(inst)
-        sys.exit("Connection failed")
+        sys.exit("Connection failed to url: "  + str(cpool.url))
     return cur
 
 # Function to execute query that accepts a cursor and full table name
@@ -214,31 +214,36 @@ def dry_run_true():
 
 def dry_run_false():
     
-    # # Hard code for testing
-    # username, password, catalog, host, port = ("starburst_service", 
-    #                                            "StarburstR0cks!", 
-    #                                            "hive", 
-    #                                            "ae34a34a332074136a033a3d4c3d3f42-1365266388.us-east-2.elb.amazonaws.com", 
-    #                                            8443)
-    # csv_file = "/Users/johndee.burks/Accounts/Sunlife/test.csv"
+    # Hard code for testing
+    username, password, catalog, host, port = ("starburst_service", 
+                                               "StarburstR0cks!", 
+                                               "hive", 
+                                               "ae34a34a332074136a033a3d4c3d3f42-1365266388.us-east-2.elb.amazonaws.com", 
+                                               8443)
+    csv_file = "/Users/johndee.burks/Accounts/Sunlife/test.csv"
 
-    # Get username and password
-    username, password = get_username_password()
+    # # Get username and password
+    # username, password = get_username_password()
     
-    # Get host and port
-    host, port = get_host_port()
+    # # Get host and port
+    # host, port = get_host_port()
     
-    # Get catalog
-    catalog = get_catalog()
+    # # Get catalog
+    # catalog = get_catalog()
     
-    # Get csv file
-    csv_file = get_csv_file()
+    # # Get csv file
+    # csv_file = get_csv_file()
     
     # Get full table list
     full_table_list = get_schema_table(csv_file)
     
     # Create connection pool
     cpool = create_connection(host, port, catalog, username, password, 15)
+
+    # Get initial connection so we do not need to waste time starting threads, if connection fails then program will exit.
+    print ("Testing connection prior to starting threads.")
+    testcur = get_connection(cpool)
+    print ("Connection successful")
 
     # Print starting message
     print ("Staring coercion finder, this will take a while please review the log file: " 
@@ -275,21 +280,3 @@ def main():
         dry_run_false()
 
 main()
-
-
-#Oauth2
-# engine = create_engine(
-# #"trino://tony.english@starburstdata.com@officialpreview.galaxy.starburst.io/glue",
-#     URL(
-#         host="officialpreview.galaxy.starburst.io",
-#         port=443,
-#         catalog="glue",
-#         user="johndee.burks@starburstdata.com"
-#     ),
-#     connect_args={
-#         "auth": OAuth2Authentication(),
-#         "http_scheme": "https",
-#         "schema": "te_demo",
-#         "verify": False
-#     }
-# )

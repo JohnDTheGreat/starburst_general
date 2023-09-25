@@ -214,25 +214,25 @@ def dry_run_true():
 
 def dry_run_false():
     
-    # Hard code for testing
-    username, password, catalog, host, port = ("starburst_service", 
-                                               "StarburstR0cks!", 
-                                               "hive", 
-                                               "ae34a34a332074136a033a3d4c3d3f42-1365266388.us-east-2.elb.amazonaws.com", 
-                                               8443)
-    csv_file = "/Users/johndee.burks/Accounts/Sunlife/test.csv"
+    # # Hard code for testing
+    # username, password, catalog, host, port = ("starburst_service", 
+    #                                            "StarburstR0cks!", 
+    #                                            "hive", 
+    #                                            "ae34a34a332074136a033a3d4c3d3f42-1365266388.us-east-2.elb.amazonaws.com", 
+    #                                            8443)
+    # csv_file = "/Users/johndee.burks/Accounts/Sunlife/test.csv"
 
-    # # Get username and password
-    # username, password = get_username_password()
+    # Get username and password
+    username, password = get_username_password()
     
-    # # Get host and port
-    # host, port = get_host_port()
+    # Get host and port
+    host, port = get_host_port()
     
-    # # Get catalog
-    # catalog = get_catalog()
+    # Get catalog
+    catalog = get_catalog()
     
-    # # Get csv file
-    # csv_file = get_csv_file()
+    # Get csv file
+    csv_file = get_csv_file()
     
     # Get full table list
     full_table_list = get_schema_table(csv_file)
@@ -247,7 +247,7 @@ def dry_run_false():
 
     # Print starting message
     print ("Staring coercion finder, this will take a while please review the log file: " 
-           + os.getcwd() + "/coercion_finders.log")
+           + os.path.abspath("coercion_finders.log"))
     lg.info("Coercion finder started")
 
     # Initialize counter and threads list

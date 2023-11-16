@@ -184,7 +184,8 @@ def dry_run_true():
     csv_file = get_csv_file()
     #csv_file = "/Users/johndee.burks/Accounts/Sunlife/test.csv"
     
-    # Get full table list
+    # Get full table list, currently this is a csvfile, 
+    # but could be changed to leverage getting tables from the cluster directly.
     full_table_list = get_schema_table(csv_file)
 
     # Print starting message

@@ -1,0 +1,58 @@
+Name:             certmanager-cert-manager-cainjector-558bf5b55d-5vj7p
+Namespace:        default
+Priority:         0
+Service Account:  certmanager-cert-manager-cainjector
+Node:             ip-10-0-189-79.us-east-2.compute.internal/10.0.189.79
+Start Time:       Mon, 04 Dec 2023 17:02:21 -0500
+Labels:           app=cainjector
+                  app.kubernetes.io/component=cainjector
+                  app.kubernetes.io/instance=certmanager
+                  app.kubernetes.io/managed-by=Helm
+                  app.kubernetes.io/name=cainjector
+                  app.kubernetes.io/version=v1.11.1
+                  helm.sh/chart=cert-manager-v1.11.1
+                  pod-template-hash=558bf5b55d
+Annotations:      <none>
+Status:           Running
+SeccompProfile:   RuntimeDefault
+IP:               10.0.189.209
+IPs:
+  IP:           10.0.189.209
+Controlled By:  ReplicaSet/certmanager-cert-manager-cainjector-558bf5b55d
+Containers:
+  cert-manager-cainjector:
+    Container ID:  containerd://087356ec8dfd0efdd8cb6a7b587926620ed932bec5eddba01c2c1b1f48d2db47
+    Image:         quay.io/jetstack/cert-manager-cainjector:v1.11.1
+    Image ID:      quay.io/jetstack/cert-manager-cainjector@sha256:db61438c42ee2bcbde6a1243a1319cb01d22b904b6e4f1cd6d0e879befbc0e49
+    Port:          <none>
+    Host Port:     <none>
+    Args:
+      --v=2
+      --leader-election-namespace=kube-system
+    State:          Running
+      Started:      Mon, 04 Dec 2023 17:02:32 -0500
+    Ready:          True
+    Restart Count:  0
+    Environment:
+      POD_NAMESPACE:  default (v1:metadata.namespace)
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-9qknh (ro)
+Conditions:
+  Type              Status
+  Initialized       True 
+  Ready             True 
+  ContainersReady   True 
+  PodScheduled      True 
+Volumes:
+  kube-api-access-9qknh:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              kubernetes.io/os=linux
+Tolerations:                 kubernetes.azure.com/scalesetpriority=spot:NoSchedule
+                             node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:                      <none>

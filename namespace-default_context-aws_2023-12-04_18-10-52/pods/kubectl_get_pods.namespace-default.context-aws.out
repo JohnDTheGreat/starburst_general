@@ -1,0 +1,10 @@
+NAME                                                   READY   STATUS    RESTARTS   AGE     IP             NODE                                        NOMINATED NODE   READINESS GATES
+certmanager-cert-manager-5f77cf4598-fcbd9              1/1     Running   0          70m     10.0.182.56    ip-10-0-189-79.us-east-2.compute.internal   <none>           <none>
+certmanager-cert-manager-cainjector-558bf5b55d-5vj7p   1/1     Running   0          70m     10.0.189.209   ip-10-0-189-79.us-east-2.compute.internal   <none>           <none>
+certmanager-cert-manager-webhook-74b6ddbb48-5zr8r      1/1     Running   0          70m     10.0.177.36    ip-10-0-189-79.us-east-2.compute.internal   <none>           <none>
+coordinator-9b999cd76-5sndp                            1/1     Running   0          4m55s   10.0.176.242   ip-10-0-177-63.us-east-2.compute.internal   <none>           <none>
+externaldns-external-dns-656c894cb-98g6b               1/1     Running   0          70m     10.0.183.238   ip-10-0-189-79.us-east-2.compute.internal   <none>           <none>
+hive-566c674cc9-7ljr6                                  1/1     Running   0          70m     10.0.177.45    ip-10-0-189-79.us-east-2.compute.internal   <none>           <none>
+nginx-ingress-nginx-controller-6547cdd79b-qx8xm        1/1     Running   0          70m     10.0.184.68    ip-10-0-189-79.us-east-2.compute.internal   <none>           <none>
+ranger-7855c458d8-dqqbr                                1/1     Running   0          70m     10.0.178.47    ip-10-0-189-79.us-east-2.compute.internal   <none>           <none>
+worker-5d58dd7855-m9fw5                                1/1     Running   0          4m55s   10.0.183.98    ip-10-0-181-56.us-east-2.compute.internal   <none>           <none>

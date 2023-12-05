@@ -1,0 +1,65 @@
+Name:             certmanager-cert-manager-cainjector-558bf5b55d-xmhm8
+Namespace:        default
+Priority:         0
+Service Account:  certmanager-cert-manager-cainjector
+Node:             ip-10-0-183-212.us-east-2.compute.internal/10.0.183.212
+Start Time:       Tue, 05 Dec 2023 14:11:37 -0500
+Labels:           app=cainjector
+                  app.kubernetes.io/component=cainjector
+                  app.kubernetes.io/instance=certmanager
+                  app.kubernetes.io/managed-by=Helm
+                  app.kubernetes.io/name=cainjector
+                  app.kubernetes.io/version=v1.11.1
+                  helm.sh/chart=cert-manager-v1.11.1
+                  pod-template-hash=558bf5b55d
+Annotations:      <none>
+Status:           Running
+SeccompProfile:   RuntimeDefault
+IP:               10.0.179.139
+IPs:
+  IP:           10.0.179.139
+Controlled By:  ReplicaSet/certmanager-cert-manager-cainjector-558bf5b55d
+Containers:
+  cert-manager-cainjector:
+    Container ID:  containerd://558dc45424d2adbd836fed6858e195aa921925683cb4d2ff3905763717e07015
+    Image:         quay.io/jetstack/cert-manager-cainjector:v1.11.1
+    Image ID:      quay.io/jetstack/cert-manager-cainjector@sha256:db61438c42ee2bcbde6a1243a1319cb01d22b904b6e4f1cd6d0e879befbc0e49
+    Port:          <none>
+    Host Port:     <none>
+    Args:
+      --v=2
+      --leader-election-namespace=kube-system
+    State:          Running
+      Started:      Tue, 05 Dec 2023 14:11:43 -0500
+    Ready:          True
+    Restart Count:  0
+    Environment:
+      POD_NAMESPACE:  default (v1:metadata.namespace)
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-t78mk (ro)
+Conditions:
+  Type              Status
+  Initialized       True 
+  Ready             True 
+  ContainersReady   True 
+  PodScheduled      True 
+Volumes:
+  kube-api-access-t78mk:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              kubernetes.io/os=linux
+Tolerations:                 kubernetes.azure.com/scalesetpriority=spot:NoSchedule
+                             node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  16m   default-scheduler  Successfully assigned default/certmanager-cert-manager-cainjector-558bf5b55d-xmhm8 to ip-10-0-183-212.us-east-2.compute.internal
+  Normal  Pulling    16m   kubelet            Pulling image "quay.io/jetstack/cert-manager-cainjector:v1.11.1"
+  Normal  Pulled     16m   kubelet            Successfully pulled image "quay.io/jetstack/cert-manager-cainjector:v1.11.1" in 2.416898827s (2.416911437s including waiting)
+  Normal  Created    16m   kubelet            Created container cert-manager-cainjector
+  Normal  Started    16m   kubelet            Started container cert-manager-cainjector

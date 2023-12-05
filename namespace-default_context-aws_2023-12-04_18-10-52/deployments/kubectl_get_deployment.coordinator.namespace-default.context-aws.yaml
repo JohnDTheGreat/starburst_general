@@ -1,0 +1,218 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "3"
+    meta.helm.sh/release-name: starburst
+    meta.helm.sh/release-namespace: default
+  creationTimestamp: "2023-11-27T21:10:24Z"
+  generation: 4
+  labels:
+    app: starburst-enterprise
+    app.kubernetes.io/managed-by: Helm
+    helm-chart: starburst-enterprise-423.1.0
+    helm-release: starburst
+    managed-by: Helm
+    role: coordinator
+  name: coordinator
+  namespace: default
+  resourceVersion: "42739885"
+  uid: 38bfbace-0605-48ef-8b48-322b50338462
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: starburst-enterprise
+      helm-release: starburst
+      role: coordinator
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        checksum/coordinator-values: b446926d8d44df6a69f054e3016f055b80d3157e8464f1686dc2e7afae978412
+        checksum/pullsecret: 355f9082932a897f8a2412547a0b3f1596698cd9b1b3bf448aab127b57d0e6d7
+      creationTimestamp: null
+      labels:
+        app: starburst-enterprise
+        helm-chart: starburst-enterprise-423.1.0
+        helm-release: starburst
+        managed-by: Helm
+        role: coordinator
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: apps
+                operator: In
+                values:
+                - sep
+      containers:
+      - env:
+        - name: POD_ID
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.uid
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: status.podIP
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+        - name: NODE_IP
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: status.hostIP
+        image: harbor.starburstdata.net/starburstdata/starburst-enterprise:423-e.1
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /v1/info
+            port: 8080
+            scheme: HTTP
+          periodSeconds: 60
+          successThreshold: 1
+          timeoutSeconds: 5
+        name: coordinator
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        - containerPort: 8443
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /v1/readiness
+            port: 8080
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        resources:
+          limits:
+            memory: 4Gi
+          requests:
+            cpu: "1"
+            memory: 4Gi
+        startupProbe:
+          failureThreshold: 40
+          httpGet:
+            path: /v1/readiness
+            port: 8080
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: FallbackToLogsOnError
+        volumeMounts:
+        - mountPath: /etc/starburst
+          name: starburst-config-updated
+        - mountPath: /starburst-license-json
+          name: starburst-license-json
+        - mountPath: /etc/starburst/telemetry
+          name: prometheus-volume
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: registry-secret-starburst-starburst-enterprise
+      initContainers:
+      - command:
+        - starburst-conf-cli
+        - generate
+        - --values-yaml
+        - /work-dir/values.yaml
+        - --config-type
+        - COORDINATOR
+        - --starburst-config-dir
+        - /etc/starburst
+        - --starburst-license-dir
+        - /starburst-license-json
+        - --ip
+        - $(POD_IP)
+        - --k8s-namespace
+        - $(POD_NAMESPACE)
+        - --chart-version
+        - 423.1.0
+        env:
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: status.podIP
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+        image: harbor.starburstdata.net/starburstdata/starburst-enterprise-init:1.5.2
+        imagePullPolicy: IfNotPresent
+        name: starburst-enterprise-init
+        resources:
+          limits:
+            memory: 4Gi
+          requests:
+            cpu: "1"
+            memory: 4Gi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /work-dir
+          name: starburst-config
+        - mountPath: /etc/starburst
+          name: starburst-config-updated
+        - mountPath: /starburst-license-json
+          name: starburst-license-json
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 10
+      tolerations:
+      - effect: NoSchedule
+        key: kubernetes.azure.com/scalesetpriority
+        operator: Equal
+        value: spot
+      volumes:
+      - name: starburst-config
+        secret:
+          defaultMode: 420
+          secretName: values-yaml-secret
+      - name: starburst-license-json
+        secret:
+          defaultMode: 420
+          secretName: starburstdata
+      - emptyDir: {}
+        name: starburst-config-updated
+      - configMap:
+          defaultMode: 420
+          name: starburst-coordinator-p8s
+        name: prometheus-volume
+status:
+  availableReplicas: 1
+  conditions:
+  - lastTransitionTime: "2023-11-27T21:10:24Z"
+    lastUpdateTime: "2023-12-04T03:48:50Z"
+    message: ReplicaSet "coordinator-9b999cd76" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  - lastTransitionTime: "2023-12-04T23:07:58Z"
+    lastUpdateTime: "2023-12-04T23:07:58Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  observedGeneration: 4
+  readyReplicas: 1
+  replicas: 1
+  updatedReplicas: 1

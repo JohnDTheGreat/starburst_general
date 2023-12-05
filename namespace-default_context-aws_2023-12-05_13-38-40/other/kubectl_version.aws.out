@@ -1,0 +1,4 @@
+WARNING: This version information is deprecated and will be replaced with the output from kubectl version --short.  Use --output=yaml|json to get the full version.
+Client Version: version.Info{Major:"1", Minor:"27", GitVersion:"v1.27.1", GitCommit:"4c9411232e10168d7b050c49a1b59f6df9d7ea4b", GitTreeState:"clean", BuildDate:"2023-04-14T13:14:41Z", GoVersion:"go1.20.3", Compiler:"gc", Platform:"darwin/arm64"}
+Kustomize Version: v5.0.1
+Server Version: version.Info{Major:"1", Minor:"27+", GitVersion:"v1.27.7-eks-4f4795d", GitCommit:"3719c8491f81867f591e895a43b4f5aab4145794", GitTreeState:"clean", BuildDate:"2023-10-20T23:21:04Z", GoVersion:"go1.20.10", Compiler:"gc", Platform:"linux/amd64"}

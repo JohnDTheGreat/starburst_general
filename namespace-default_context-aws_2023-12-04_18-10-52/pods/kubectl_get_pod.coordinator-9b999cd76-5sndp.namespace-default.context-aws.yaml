@@ -1,0 +1,272 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    checksum/coordinator-values: b446926d8d44df6a69f054e3016f055b80d3157e8464f1686dc2e7afae978412
+    checksum/pullsecret: 355f9082932a897f8a2412547a0b3f1596698cd9b1b3bf448aab127b57d0e6d7
+  creationTimestamp: "2023-12-04T23:06:07Z"
+  generateName: coordinator-9b999cd76-
+  labels:
+    app: starburst-enterprise
+    helm-chart: starburst-enterprise-423.1.0
+    helm-release: starburst
+    managed-by: Helm
+    pod-template-hash: 9b999cd76
+    role: coordinator
+  name: coordinator-9b999cd76-5sndp
+  namespace: default
+  ownerReferences:
+  - apiVersion: apps/v1
+    blockOwnerDeletion: true
+    controller: true
+    kind: ReplicaSet
+    name: coordinator-9b999cd76
+    uid: 2a28c807-c09e-475b-93ee-657eb02cc0ad
+  resourceVersion: "42739877"
+  uid: 3bb69817-6161-4bf4-a85c-859c5c89e826
+spec:
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: apps
+            operator: In
+            values:
+            - sep
+  containers:
+  - env:
+    - name: POD_ID
+      valueFrom:
+        fieldRef:
+          apiVersion: v1
+          fieldPath: metadata.uid
+    - name: POD_IP
+      valueFrom:
+        fieldRef:
+          apiVersion: v1
+          fieldPath: status.podIP
+    - name: POD_NAMESPACE
+      valueFrom:
+        fieldRef:
+          apiVersion: v1
+          fieldPath: metadata.namespace
+    - name: NODE_IP
+      valueFrom:
+        fieldRef:
+          apiVersion: v1
+          fieldPath: status.hostIP
+    image: harbor.starburstdata.net/starburstdata/starburst-enterprise:423-e.1
+    imagePullPolicy: IfNotPresent
+    livenessProbe:
+      failureThreshold: 3
+      httpGet:
+        path: /v1/info
+        port: 8080
+        scheme: HTTP
+      periodSeconds: 60
+      successThreshold: 1
+      timeoutSeconds: 5
+    name: coordinator
+    ports:
+    - containerPort: 8080
+      protocol: TCP
+    - containerPort: 8443
+      protocol: TCP
+    readinessProbe:
+      failureThreshold: 3
+      httpGet:
+        path: /v1/readiness
+        port: 8080
+        scheme: HTTP
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 5
+    resources:
+      limits:
+        memory: 4Gi
+      requests:
+        cpu: "1"
+        memory: 4Gi
+    startupProbe:
+      failureThreshold: 40
+      httpGet:
+        path: /v1/readiness
+        port: 8080
+        scheme: HTTP
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 1
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: FallbackToLogsOnError
+    volumeMounts:
+    - mountPath: /etc/starburst
+      name: starburst-config-updated
+    - mountPath: /starburst-license-json
+      name: starburst-license-json
+    - mountPath: /etc/starburst/telemetry
+      name: prometheus-volume
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: kube-api-access-ttd2c
+      readOnly: true
+  dnsPolicy: ClusterFirst
+  enableServiceLinks: true
+  imagePullSecrets:
+  - name: registry-secret-starburst-starburst-enterprise
+  initContainers:
+  - command:
+    - starburst-conf-cli
+    - generate
+    - --values-yaml
+    - /work-dir/values.yaml
+    - --config-type
+    - COORDINATOR
+    - --starburst-config-dir
+    - /etc/starburst
+    - --starburst-license-dir
+    - /starburst-license-json
+    - --ip
+    - $(POD_IP)
+    - --k8s-namespace
+    - $(POD_NAMESPACE)
+    - --chart-version
+    - 423.1.0
+    env:
+    - name: POD_IP
+      valueFrom:
+        fieldRef:
+          apiVersion: v1
+          fieldPath: status.podIP
+    - name: POD_NAMESPACE
+      valueFrom:
+        fieldRef:
+          apiVersion: v1
+          fieldPath: metadata.namespace
+    image: harbor.starburstdata.net/starburstdata/starburst-enterprise-init:1.5.2
+    imagePullPolicy: IfNotPresent
+    name: starburst-enterprise-init
+    resources:
+      limits:
+        memory: 4Gi
+      requests:
+        cpu: "1"
+        memory: 4Gi
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /work-dir
+      name: starburst-config
+    - mountPath: /etc/starburst
+      name: starburst-config-updated
+    - mountPath: /starburst-license-json
+      name: starburst-license-json
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: kube-api-access-ttd2c
+      readOnly: true
+  nodeName: ip-10-0-177-63.us-east-2.compute.internal
+  preemptionPolicy: PreemptLowerPriority
+  priority: 0
+  restartPolicy: Always
+  schedulerName: default-scheduler
+  securityContext: {}
+  serviceAccount: default
+  serviceAccountName: default
+  terminationGracePeriodSeconds: 10
+  tolerations:
+  - effect: NoSchedule
+    key: kubernetes.azure.com/scalesetpriority
+    operator: Equal
+    value: spot
+  - effect: NoExecute
+    key: node.kubernetes.io/not-ready
+    operator: Exists
+    tolerationSeconds: 300
+  - effect: NoExecute
+    key: node.kubernetes.io/unreachable
+    operator: Exists
+    tolerationSeconds: 300
+  volumes:
+  - name: starburst-config
+    secret:
+      defaultMode: 420
+      secretName: values-yaml-secret
+  - name: starburst-license-json
+    secret:
+      defaultMode: 420
+      secretName: starburstdata
+  - emptyDir: {}
+    name: starburst-config-updated
+  - configMap:
+      defaultMode: 420
+      name: starburst-coordinator-p8s
+    name: prometheus-volume
+  - name: kube-api-access-ttd2c
+    projected:
+      defaultMode: 420
+      sources:
+      - serviceAccountToken:
+          expirationSeconds: 3607
+          path: token
+      - configMap:
+          items:
+          - key: ca.crt
+            path: ca.crt
+          name: kube-root-ca.crt
+      - downwardAPI:
+          items:
+          - fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+            path: namespace
+status:
+  conditions:
+  - lastProbeTime: null
+    lastTransitionTime: "2023-12-04T23:06:21Z"
+    status: "True"
+    type: Initialized
+  - lastProbeTime: null
+    lastTransitionTime: "2023-12-04T23:07:57Z"
+    status: "True"
+    type: Ready
+  - lastProbeTime: null
+    lastTransitionTime: "2023-12-04T23:07:57Z"
+    status: "True"
+    type: ContainersReady
+  - lastProbeTime: null
+    lastTransitionTime: "2023-12-04T23:06:07Z"
+    status: "True"
+    type: PodScheduled
+  containerStatuses:
+  - containerID: containerd://e4a698c50772534fa213552e183347fd52867642352756f8523dd1a3c52f3b46
+    image: harbor.starburstdata.net/starburstdata/starburst-enterprise:423-e.1
+    imageID: harbor.starburstdata.net/starburstdata/starburst-enterprise@sha256:fe03dc7e8b3633732c5bcee4c14075ec31bedca128b4b2d7fac74be0edac3366
+    lastState: {}
+    name: coordinator
+    ready: true
+    restartCount: 0
+    started: true
+    state:
+      running:
+        startedAt: "2023-12-04T23:07:02Z"
+  hostIP: 10.0.177.63
+  initContainerStatuses:
+  - containerID: containerd://71ac0674aa87df8f16c21183d9a4fcc629ad64f67cbaa0edd20bcce2ac8c00c1
+    image: harbor.starburstdata.net/starburstdata/starburst-enterprise-init:1.5.2
+    imageID: harbor.starburstdata.net/starburstdata/starburst-enterprise-init@sha256:711c926528d7000e483fedd81ca68e8774be1ab2a7a11e8bde4e03d82f87315f
+    lastState: {}
+    name: starburst-enterprise-init
+    ready: true
+    restartCount: 0
+    state:
+      terminated:
+        containerID: containerd://71ac0674aa87df8f16c21183d9a4fcc629ad64f67cbaa0edd20bcce2ac8c00c1
+        exitCode: 0
+        finishedAt: "2023-12-04T23:06:18Z"
+        reason: Completed
+        startedAt: "2023-12-04T23:06:16Z"
+  phase: Running
+  podIP: 10.0.176.242
+  podIPs:
+  - ip: 10.0.176.242
+  qosClass: Burstable
+  startTime: "2023-12-04T23:06:07Z"

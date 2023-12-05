@@ -1,0 +1,204 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+    meta.helm.sh/release-name: ranger
+    meta.helm.sh/release-namespace: default
+  creationTimestamp: "2023-05-16T06:45:13Z"
+  generation: 1
+  labels:
+    app: starburst-ranger
+    app.kubernetes.io/managed-by: Helm
+    helm-chart: starburst-ranger-411.0.0
+    helm-release: ranger
+    managed-by: Helm
+  name: ranger
+  namespace: default
+  resourceVersion: "42907041"
+  uid: b1ae788c-1fa4-4f07-bc4f-a12ff1f9807d
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: starburst-ranger
+      helm-release: ranger
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        checksum/datasources: de094e6aae7f23a95b19c9bcbefb54045942a73a752346280bd01f6dc142d935
+        checksum/extra-secret: 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b
+        checksum/init-file: 103a292a332246d2311b25b30e290d61b4e023c10bdfa168b580e96e50d012f7
+        checksum/init-file-scripts: f7438e33138df2598cecb2202f54c81925df4e11539c493e8a6b5b12d1b0eff6
+        checksum/registry-secret: 54e6f6b2e4cba7dbf9893ff249254bbae44c3d2a716bcc3b53ff61e85b14e57b
+      creationTimestamp: null
+      labels:
+        app: starburst-ranger
+        helm-chart: starburst-ranger-411.0.0
+        helm-release: ranger
+        managed-by: Helm
+      name: ranger
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: apps
+                operator: In
+                values:
+                - base
+      containers:
+      - args:
+        - /init/initFile
+        - ranger-admin
+        command:
+        - /bin/bash
+        env:
+        - name: RANGER__policymgr_port
+          value: "6080"
+        - name: RANGER__db_name
+          value: eks_ranger
+        - name: RANGER__db_root_user
+          value: postgres
+        - name: RANGER__db_root_password
+          valueFrom:
+            secretKeyRef:
+              key: databaseRootPassword
+              name: ranger-database-password
+        - name: RANGER__db_user
+          value: postgres
+        - name: RANGER__db_password
+          valueFrom:
+            secretKeyRef:
+              key: databasePassword
+              name: ranger-database-password
+        - name: RANGER__db_host
+          value: johndee-burks-bootcamp-postgresql.cs8j7iukogcy.us-east-2.rds.amazonaws.com
+        - name: WAIT_FOR
+          value: johndee-burks-bootcamp-postgresql.cs8j7iukogcy.us-east-2.rds.amazonaws.com:5432
+        - name: RANGER__rangerAdmin_password
+          valueFrom:
+            secretKeyRef:
+              key: admin.passwords.admin
+              name: ranger-password-secret
+        - name: RANGER__rangerTagsync_password
+          valueFrom:
+            secretKeyRef:
+              key: admin.passwords.tagsync
+              name: ranger-password-secret
+        - name: RANGER__rangerUsersync_password
+          valueFrom:
+            secretKeyRef:
+              key: admin.passwords.usersync
+              name: ranger-password-secret
+        - name: RANGER__keyadmin_password
+          valueFrom:
+            secretKeyRef:
+              key: admin.passwords.keyadmin
+              name: ranger-password-secret
+        - name: WAIT_TIMEOUT
+          value: "15"
+        image: harbor.starburstdata.net/starburstdata/starburst-ranger-admin:2.3.0-e.5
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /
+            port: http
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        name: ranger-admin
+        ports:
+        - containerPort: 6080
+          name: http
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 10
+          httpGet:
+            path: /
+            port: http
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources:
+          limits:
+            cpu: "2"
+            memory: 1Gi
+          requests:
+            cpu: "1"
+            memory: 1Gi
+        startupProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - grep 'ranger-admin started' /opt/ranger/starburst-ranger-server-admin-*/ews/logs/start.sh.log
+          failureThreshold: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: FallbackToLogsOnError
+        volumeMounts:
+        - mountPath: /init
+          name: init-file
+          readOnly: true
+        - mountPath: /scripts
+          name: scripts-volume
+        - mountPath: /config
+          name: datasources-volume
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: registry-secret-ranger-starburst-ranger
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      tolerations:
+      - effect: NoSchedule
+        key: kubernetes.azure.com/scalesetpriority
+        operator: Equal
+        value: spot
+      volumes:
+      - name: init-file
+        secret:
+          defaultMode: 420
+          secretName: init-secret-ranger-starburst-ranger
+      - configMap:
+          defaultMode: 493
+          name: scripts-configmap
+        name: scripts-volume
+      - name: datasources-volume
+        secret:
+          defaultMode: 420
+          secretName: datasources-secret-ranger-starburst-ranger
+status:
+  availableReplicas: 1
+  conditions:
+  - lastTransitionTime: "2023-05-16T06:45:13Z"
+    lastUpdateTime: "2023-05-16T06:46:54Z"
+    message: ReplicaSet "ranger-7855c458d8" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  - lastTransitionTime: "2023-12-05T18:25:40Z"
+    lastUpdateTime: "2023-12-05T18:25:40Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  observedGeneration: 1
+  readyReplicas: 1
+  replicas: 1
+  updatedReplicas: 1

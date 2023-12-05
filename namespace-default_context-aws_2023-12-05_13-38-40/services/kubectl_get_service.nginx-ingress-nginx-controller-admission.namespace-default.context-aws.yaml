@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    meta.helm.sh/release-name: nginx
+    meta.helm.sh/release-namespace: default
+  creationTimestamp: "2023-08-01T15:35:55Z"
+  labels:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/instance: nginx
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
+    app.kubernetes.io/version: 1.7.0
+    helm.sh/chart: ingress-nginx-4.6.0
+  name: nginx-ingress-nginx-controller-admission
+  namespace: default
+  resourceVersion: "16024551"
+  uid: bdbf928e-494a-4ed0-b853-50bd2e119d2d
+spec:
+  clusterIP: 172.20.113.204
+  clusterIPs:
+  - 172.20.113.204
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: https-webhook
+    port: 443
+    protocol: TCP
+    targetPort: webhook
+  selector:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/instance: nginx
+    app.kubernetes.io/name: ingress-nginx
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}

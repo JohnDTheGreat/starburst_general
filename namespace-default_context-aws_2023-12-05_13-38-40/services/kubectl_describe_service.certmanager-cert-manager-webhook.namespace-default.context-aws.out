@@ -1,0 +1,22 @@
+Name:              certmanager-cert-manager-webhook
+Namespace:         default
+Labels:            app=webhook
+                   app.kubernetes.io/component=webhook
+                   app.kubernetes.io/instance=certmanager
+                   app.kubernetes.io/managed-by=Helm
+                   app.kubernetes.io/name=webhook
+                   app.kubernetes.io/version=v1.11.1
+                   helm.sh/chart=cert-manager-v1.11.1
+Annotations:       meta.helm.sh/release-name: certmanager
+                   meta.helm.sh/release-namespace: default
+Selector:          app.kubernetes.io/component=webhook,app.kubernetes.io/instance=certmanager,app.kubernetes.io/name=webhook
+Type:              ClusterIP
+IP Family Policy:  SingleStack
+IP Families:       IPv4
+IP:                172.20.8.205
+IPs:               172.20.8.205
+Port:              https  443/TCP
+TargetPort:        https/TCP
+Endpoints:         10.0.185.235:10250
+Session Affinity:  None
+Events:            <none>

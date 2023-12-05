@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    meta.helm.sh/release-name: nginx
+    meta.helm.sh/release-namespace: default
+  creationTimestamp: "2023-08-01T15:35:55Z"
+  finalizers:
+  - service.kubernetes.io/load-balancer-cleanup
+  labels:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/instance: nginx
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
+    app.kubernetes.io/version: 1.7.0
+    helm.sh/chart: ingress-nginx-4.6.0
+  name: nginx-ingress-nginx-controller
+  namespace: default
+  resourceVersion: "29853245"
+  uid: 41958bb2-0ba9-410d-81ce-158ac84b0261
+spec:
+  allocateLoadBalancerNodePorts: true
+  clusterIP: 172.20.64.4
+  clusterIPs:
+  - 172.20.64.4
+  externalTrafficPolicy: Cluster
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: http
+    nodePort: 31232
+    port: 80
+    protocol: TCP
+    targetPort: http
+  - name: https
+    nodePort: 30774
+    port: 443
+    protocol: TCP
+    targetPort: https
+  selector:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/instance: nginx
+    app.kubernetes.io/name: ingress-nginx
+  sessionAffinity: None
+  type: LoadBalancer
+status:
+  loadBalancer:
+    ingress:
+    - hostname: a41958bb20ba9410d81ce158ac84b026-1084060373.us-east-2.elb.amazonaws.com

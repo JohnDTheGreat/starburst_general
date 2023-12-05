@@ -1,0 +1,104 @@
+Name:             ranger-7855c458d8-t8w76
+Namespace:        default
+Priority:         0
+Service Account:  default
+Node:             ip-10-0-183-212.us-east-2.compute.internal/10.0.183.212
+Start Time:       Tue, 05 Dec 2023 14:11:38 -0500
+Labels:           app=starburst-ranger
+                  helm-chart=starburst-ranger-411.0.0
+                  helm-release=ranger
+                  managed-by=Helm
+                  pod-template-hash=7855c458d8
+Annotations:      checksum/datasources: de094e6aae7f23a95b19c9bcbefb54045942a73a752346280bd01f6dc142d935
+                  checksum/extra-secret: 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b
+                  checksum/init-file: 103a292a332246d2311b25b30e290d61b4e023c10bdfa168b580e96e50d012f7
+                  checksum/init-file-scripts: f7438e33138df2598cecb2202f54c81925df4e11539c493e8a6b5b12d1b0eff6
+                  checksum/registry-secret: 54e6f6b2e4cba7dbf9893ff249254bbae44c3d2a716bcc3b53ff61e85b14e57b
+Status:           Running
+IP:               10.0.191.237
+IPs:
+  IP:           10.0.191.237
+Controlled By:  ReplicaSet/ranger-7855c458d8
+Containers:
+  ranger-admin:
+    Container ID:  containerd://f4bbd845072b735f90ce4fff9f40aa90930a1567ad41e1f063eec9149953f60e
+    Image:         harbor.starburstdata.net/starburstdata/starburst-ranger-admin:2.3.0-e.5
+    Image ID:      harbor.starburstdata.net/starburstdata/starburst-ranger-admin@sha256:eb55c150eecf4330a68a260dddb24333d2b2ce1e6119a0368f060087eaab73c9
+    Port:          6080/TCP
+    Host Port:     0/TCP
+    Command:
+      /bin/bash
+    Args:
+      /init/initFile
+      ranger-admin
+    State:          Running
+      Started:      Tue, 05 Dec 2023 14:12:23 -0500
+    Ready:          True
+    Restart Count:  0
+    Limits:
+      cpu:     2
+      memory:  1Gi
+    Requests:
+      cpu:      1
+      memory:   1Gi
+    Liveness:   http-get http://:http/ delay=0s timeout=1s period=10s #success=1 #failure=3
+    Readiness:  http-get http://:http/ delay=0s timeout=1s period=10s #success=1 #failure=10
+    Startup:    exec [sh -c grep 'ranger-admin started' /opt/ranger/starburst-ranger-server-admin-*/ews/logs/start.sh.log] delay=0s timeout=1s period=10s #success=1 #failure=30
+    Environment:
+      RANGER__policymgr_port:           6080
+      RANGER__db_name:                  eks_ranger
+      RANGER__db_root_user:             postgres
+      RANGER__db_root_password:         <set to the key 'databaseRootPassword' in secret 'ranger-database-password'>  Optional: false
+      RANGER__db_user:                  postgres
+      RANGER__db_password:              <set to the key 'databasePassword' in secret 'ranger-database-password'>  Optional: false
+      RANGER__db_host:                  johndee-burks-bootcamp-postgresql.cs8j7iukogcy.us-east-2.rds.amazonaws.com
+      WAIT_FOR:                         johndee-burks-bootcamp-postgresql.cs8j7iukogcy.us-east-2.rds.amazonaws.com:5432
+      RANGER__rangerAdmin_password:     <set to the key 'admin.passwords.admin' in secret 'ranger-password-secret'>     Optional: false
+      RANGER__rangerTagsync_password:   <set to the key 'admin.passwords.tagsync' in secret 'ranger-password-secret'>   Optional: false
+      RANGER__rangerUsersync_password:  <set to the key 'admin.passwords.usersync' in secret 'ranger-password-secret'>  Optional: false
+      RANGER__keyadmin_password:        <set to the key 'admin.passwords.keyadmin' in secret 'ranger-password-secret'>  Optional: false
+      WAIT_TIMEOUT:                     15
+    Mounts:
+      /config from datasources-volume (rw)
+      /init from init-file (ro)
+      /scripts from scripts-volume (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-cmmj5 (ro)
+Conditions:
+  Type              Status
+  Initialized       True 
+  Ready             True 
+  ContainersReady   True 
+  PodScheduled      True 
+Volumes:
+  init-file:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  init-secret-ranger-starburst-ranger
+    Optional:    false
+  scripts-volume:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      scripts-configmap
+    Optional:  false
+  datasources-volume:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  datasources-secret-ranger-starburst-ranger
+    Optional:    false
+  kube-api-access-cmmj5:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 kubernetes.azure.com/scalesetpriority=spot:NoSchedule
+                             node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  17m                default-scheduler  Successfully assigned default/ranger-7855c458d8-t8w76 to ip-10-0-183-212.us-east-2.compute.internal
+  Normal   Pulling    17m                kubelet            Pulling image "harbor.starburstdata.net/starburstdata/starburst-ranger-admin:2.3.0-e.5"
+  Normal   Pulled     16m                kubelet            Successfully pulled image "harbor.starburstdata.net/starburstdata/starburst-ranger-admin:2.3.0-e.5" in 43.375123661s (43.375133952s including waiting)
+  Normal   Created    16m                kubelet            Created container ranger-admin
+  Normal   Started    16m                kubelet            Started container ranger-admin
+  Warning  Unhealthy  15m (x7 over 16m)  kubelet            Startup probe failed: grep: /opt/ranger/starburst-ranger-server-admin-*/ews/logs/start.sh.log: No such file or directory

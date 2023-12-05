@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    meta.helm.sh/release-name: starburst
+    meta.helm.sh/release-namespace: default
+  creationTimestamp: "2023-11-27T21:10:24Z"
+  labels:
+    app: starburst-enterprise
+    app.kubernetes.io/managed-by: Helm
+    helm-chart: starburst-enterprise-423.1.0
+    helm-release: starburst
+    managed-by: Helm
+    role: prometheus-coordinator
+  name: prometheus-coordinator-starburst
+  namespace: default
+  resourceVersion: "41210871"
+  uid: d65c5df3-5272-4a86-9aa6-60260436bad8
+spec:
+  clusterIP: 172.20.47.84
+  clusterIPs:
+  - 172.20.47.84
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: metrics
+    port: 8081
+    protocol: TCP
+    targetPort: 8081
+  selector:
+    app: starburst-enterprise
+    helm-chart: starburst-enterprise-423.1.0
+    helm-release: starburst
+    managed-by: Helm
+    role: coordinator
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}

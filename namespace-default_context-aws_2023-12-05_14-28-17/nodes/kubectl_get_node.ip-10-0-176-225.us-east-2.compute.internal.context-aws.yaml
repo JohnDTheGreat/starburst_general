@@ -1,0 +1,157 @@
+apiVersion: v1
+kind: Node
+metadata:
+  annotations:
+    alpha.kubernetes.io/provided-node-ip: 10.0.176.225
+    node.alpha.kubernetes.io/ttl: "0"
+    volumes.kubernetes.io/controller-managed-attach-detach: "true"
+  creationTimestamp: "2023-12-05T19:06:05Z"
+  labels:
+    alpha.eksctl.io/cluster-name: johndee-burks-lab01
+    alpha.eksctl.io/nodegroup-name: sep
+    apps: sep
+    beta.kubernetes.io/arch: amd64
+    beta.kubernetes.io/instance-type: m5ad.xlarge
+    beta.kubernetes.io/os: linux
+    eks.amazonaws.com/capacityType: SPOT
+    eks.amazonaws.com/nodegroup: sep
+    eks.amazonaws.com/nodegroup-image: ami-09d80224b8fe20ffb
+    eks.amazonaws.com/sourceLaunchTemplateId: lt-0f1f8c53f654d6bc5
+    eks.amazonaws.com/sourceLaunchTemplateVersion: "1"
+    failure-domain.beta.kubernetes.io/region: us-east-2
+    failure-domain.beta.kubernetes.io/zone: us-east-2c
+    k8s.io/cloud-provider-aws: 74a2e788da539a33579b6e0ea15571c4
+    kubernetes.io/arch: amd64
+    kubernetes.io/hostname: ip-10-0-176-225.us-east-2.compute.internal
+    kubernetes.io/os: linux
+    node.kubernetes.io/instance-type: m5ad.xlarge
+    topology.kubernetes.io/region: us-east-2
+    topology.kubernetes.io/zone: us-east-2c
+  name: ip-10-0-176-225.us-east-2.compute.internal
+  resourceVersion: "42918196"
+  uid: 27e9c987-693c-442e-b94f-dc881c0d7bec
+spec:
+  providerID: aws:///us-east-2c/i-032b04e0fe98ad6d9
+status:
+  addresses:
+  - address: 10.0.176.225
+    type: InternalIP
+  - address: ip-10-0-176-225.us-east-2.compute.internal
+    type: InternalDNS
+  - address: ip-10-0-176-225.us-east-2.compute.internal
+    type: Hostname
+  allocatable:
+    cpu: 3920m
+    ephemeral-storage: "76224326324"
+    hugepages-1Gi: "0"
+    hugepages-2Mi: "0"
+    memory: 14968288Ki
+    pods: "58"
+  capacity:
+    cpu: "4"
+    ephemeral-storage: 83873772Ki
+    hugepages-1Gi: "0"
+    hugepages-2Mi: "0"
+    memory: 15985120Ki
+    pods: "58"
+  conditions:
+  - lastHeartbeatTime: "2023-12-05T19:27:00Z"
+    lastTransitionTime: "2023-12-05T19:06:04Z"
+    message: kubelet has sufficient memory available
+    reason: KubeletHasSufficientMemory
+    status: "False"
+    type: MemoryPressure
+  - lastHeartbeatTime: "2023-12-05T19:27:00Z"
+    lastTransitionTime: "2023-12-05T19:06:04Z"
+    message: kubelet has no disk pressure
+    reason: KubeletHasNoDiskPressure
+    status: "False"
+    type: DiskPressure
+  - lastHeartbeatTime: "2023-12-05T19:27:00Z"
+    lastTransitionTime: "2023-12-05T19:06:04Z"
+    message: kubelet has sufficient PID available
+    reason: KubeletHasSufficientPID
+    status: "False"
+    type: PIDPressure
+  - lastHeartbeatTime: "2023-12-05T19:27:00Z"
+    lastTransitionTime: "2023-12-05T19:06:25Z"
+    message: kubelet is posting ready status
+    reason: KubeletReady
+    status: "True"
+    type: Ready
+  daemonEndpoints:
+    kubeletEndpoint:
+      Port: 10250
+  images:
+  - names:
+    - 602401143452.dkr.ecr.us-east-2.amazonaws.com/amazon-k8s-cni@sha256:2fd65a8764b71c2f3ae6ef89e5cb0d85f57f52514815b2a9a40ccad582743fa4
+    - 602401143452.dkr.ecr.us-east-2.amazonaws.com/amazon-k8s-cni:v1.11.4-eksbuild.1
+    sizeBytes: 101675103
+  - names:
+    - 602401143452.dkr.ecr.us-east-2.amazonaws.com/amazon-k8s-cni-init@sha256:e3cb52e6e9b054c7638e0015637ac07a44bd5a9bf5dd4ac98a40c57ce21544fd
+    - 602401143452.dkr.ecr.us-east-2.amazonaws.com/amazon-k8s-cni-init:v1.11.4-eksbuild.1
+    sizeBytes: 101259951
+  - names:
+    - 602401143452.dkr.ecr-fips.us-east-1.amazonaws.com/amazon-k8s-cni-init:v1.14.0-eksbuild.3
+    - 602401143452.dkr.ecr-fips.us-east-2.amazonaws.com/amazon-k8s-cni-init:v1.14.0-eksbuild.3
+    - 602401143452.dkr.ecr-fips.us-west-1.amazonaws.com/amazon-k8s-cni-init:v1.14.0-eksbuild.3
+    - 602401143452.dkr.ecr-fips.us-west-2.amazonaws.com/amazon-k8s-cni-init:v1.14.0-eksbuild.3
+    - 602401143452.dkr.ecr.af-south-1.amazonaws.com/amazon-k8s-cni-init:v1.14.0-eksbuild.3
+    sizeBytes: 59663717
+  - names:
+    - 602401143452.dkr.ecr-fips.us-east-1.amazonaws.com/amazon-k8s-cni:v1.14.0-eksbuild.3
+    - 602401143452.dkr.ecr-fips.us-east-2.amazonaws.com/amazon-k8s-cni:v1.14.0-eksbuild.3
+    - 602401143452.dkr.ecr-fips.us-west-1.amazonaws.com/amazon-k8s-cni:v1.14.0-eksbuild.3
+    - 602401143452.dkr.ecr-fips.us-west-2.amazonaws.com/amazon-k8s-cni:v1.14.0-eksbuild.3
+    - 602401143452.dkr.ecr.af-south-1.amazonaws.com/amazon-k8s-cni:v1.14.0-eksbuild.3
+    sizeBytes: 44060137
+  - names:
+    - 602401143452.dkr.ecr-fips.us-east-1.amazonaws.com/amazon-k8s-cni:v1.12.6-eksbuild.2
+    - 602401143452.dkr.ecr-fips.us-east-2.amazonaws.com/amazon-k8s-cni:v1.12.6-eksbuild.2
+    - 602401143452.dkr.ecr-fips.us-west-1.amazonaws.com/amazon-k8s-cni:v1.12.6-eksbuild.2
+    - 602401143452.dkr.ecr-fips.us-west-2.amazonaws.com/amazon-k8s-cni:v1.12.6-eksbuild.2
+    - 602401143452.dkr.ecr.af-south-1.amazonaws.com/amazon-k8s-cni:v1.12.6-eksbuild.2
+    sizeBytes: 42862707
+  - names:
+    - 602401143452.dkr.ecr-fips.us-east-1.amazonaws.com/eks/kube-proxy:v1.27.1-minimal
+    - 602401143452.dkr.ecr-fips.us-east-1.amazonaws.com/eks/kube-proxy:v1.27.1-minimal-eksbuild.1
+    - 602401143452.dkr.ecr-fips.us-east-2.amazonaws.com/eks/kube-proxy:v1.27.1-minimal
+    - 602401143452.dkr.ecr-fips.us-east-2.amazonaws.com/eks/kube-proxy:v1.27.1-minimal-eksbuild.1
+    - 602401143452.dkr.ecr-fips.us-west-1.amazonaws.com/eks/kube-proxy:v1.27.1-minimal
+    sizeBytes: 29980152
+  - names:
+    - 602401143452.dkr.ecr-fips.us-east-1.amazonaws.com/eks/kube-proxy:v1.27.4-minimal-eksbuild.2
+    - 602401143452.dkr.ecr-fips.us-east-2.amazonaws.com/eks/kube-proxy:v1.27.4-minimal-eksbuild.2
+    - 602401143452.dkr.ecr-fips.us-west-1.amazonaws.com/eks/kube-proxy:v1.27.4-minimal-eksbuild.2
+    - 602401143452.dkr.ecr-fips.us-west-2.amazonaws.com/eks/kube-proxy:v1.27.4-minimal-eksbuild.2
+    - 602401143452.dkr.ecr.af-south-1.amazonaws.com/eks/kube-proxy:v1.27.4-minimal-eksbuild.2
+    sizeBytes: 29976984
+  - names:
+    - 602401143452.dkr.ecr.us-east-2.amazonaws.com/eks/kube-proxy@sha256:a4f32ea2ddf8d47424b6f4e9902ceabe6f449afbeaca843c7803dbf541f0837c
+    - 602401143452.dkr.ecr.us-east-2.amazonaws.com/eks/kube-proxy:v1.24.7-minimal-eksbuild.2
+    sizeBytes: 25549596
+  - names:
+    - 602401143452.dkr.ecr-fips.us-east-1.amazonaws.com/amazon-k8s-cni-init:v1.12.6-eksbuild.2
+    - 602401143452.dkr.ecr-fips.us-east-2.amazonaws.com/amazon-k8s-cni-init:v1.12.6-eksbuild.2
+    - 602401143452.dkr.ecr-fips.us-west-1.amazonaws.com/amazon-k8s-cni-init:v1.12.6-eksbuild.2
+    - 602401143452.dkr.ecr-fips.us-west-2.amazonaws.com/amazon-k8s-cni-init:v1.12.6-eksbuild.2
+    - 602401143452.dkr.ecr.af-south-1.amazonaws.com/amazon-k8s-cni-init:v1.12.6-eksbuild.2
+    sizeBytes: 22202900
+  - names:
+    - 602401143452.dkr.ecr-fips.us-east-1.amazonaws.com/eks/pause:3.5
+    - 602401143452.dkr.ecr-fips.us-east-2.amazonaws.com/eks/pause:3.5
+    - 602401143452.dkr.ecr-fips.us-west-1.amazonaws.com/eks/pause:3.5
+    - 602401143452.dkr.ecr-fips.us-west-2.amazonaws.com/eks/pause:3.5
+    - 602401143452.dkr.ecr.af-south-1.amazonaws.com/eks/pause:3.5
+    sizeBytes: 298689
+  nodeInfo:
+    architecture: amd64
+    bootID: 0ce1f2bd-658e-4e79-9434-e4dd0bfb3ca9
+    containerRuntimeVersion: containerd://1.6.19
+    kernelVersion: 5.10.186-179.751.amzn2.x86_64
+    kubeProxyVersion: v1.27.4-eks-8ccc7ba
+    kubeletVersion: v1.27.4-eks-8ccc7ba
+    machineID: ec2d6b4d45a650e6c39478cc652025e1
+    operatingSystem: linux
+    osImage: Amazon Linux 2
+    systemUUID: ec2d6b4d-45a6-50e6-c394-78cc652025e1

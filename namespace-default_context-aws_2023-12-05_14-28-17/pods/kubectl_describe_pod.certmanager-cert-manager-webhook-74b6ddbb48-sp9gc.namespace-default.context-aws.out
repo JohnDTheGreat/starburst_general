@@ -1,0 +1,72 @@
+Name:             certmanager-cert-manager-webhook-74b6ddbb48-sp9gc
+Namespace:        default
+Priority:         0
+Service Account:  certmanager-cert-manager-webhook
+Node:             ip-10-0-183-212.us-east-2.compute.internal/10.0.183.212
+Start Time:       Tue, 05 Dec 2023 14:11:38 -0500
+Labels:           app=webhook
+                  app.kubernetes.io/component=webhook
+                  app.kubernetes.io/instance=certmanager
+                  app.kubernetes.io/managed-by=Helm
+                  app.kubernetes.io/name=webhook
+                  app.kubernetes.io/version=v1.11.1
+                  helm.sh/chart=cert-manager-v1.11.1
+                  pod-template-hash=74b6ddbb48
+Annotations:      <none>
+Status:           Running
+SeccompProfile:   RuntimeDefault
+IP:               10.0.186.227
+IPs:
+  IP:           10.0.186.227
+Controlled By:  ReplicaSet/certmanager-cert-manager-webhook-74b6ddbb48
+Containers:
+  cert-manager-webhook:
+    Container ID:  containerd://e50832a0de3649e6d7424683f16979ac9c63438b69d0b05337691694cc81b22d
+    Image:         quay.io/jetstack/cert-manager-webhook:v1.11.1
+    Image ID:      quay.io/jetstack/cert-manager-webhook@sha256:856ae76ee31ae383f7a2505d8a6e8d9961413cbe760219372732ec982b202ef1
+    Ports:         10250/TCP, 6080/TCP
+    Host Ports:    0/TCP, 0/TCP
+    Args:
+      --v=2
+      --secure-port=10250
+      --dynamic-serving-ca-secret-namespace=$(POD_NAMESPACE)
+      --dynamic-serving-ca-secret-name=certmanager-cert-manager-webhook-ca
+      --dynamic-serving-dns-names=certmanager-cert-manager-webhook
+      --dynamic-serving-dns-names=certmanager-cert-manager-webhook.$(POD_NAMESPACE)
+      --dynamic-serving-dns-names=certmanager-cert-manager-webhook.$(POD_NAMESPACE).svc
+    State:          Running
+      Started:      Tue, 05 Dec 2023 14:11:44 -0500
+    Ready:          True
+    Restart Count:  0
+    Liveness:       http-get http://:6080/livez delay=60s timeout=1s period=10s #success=1 #failure=3
+    Readiness:      http-get http://:6080/healthz delay=5s timeout=1s period=5s #success=1 #failure=3
+    Environment:
+      POD_NAMESPACE:  default (v1:metadata.namespace)
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-7tqtk (ro)
+Conditions:
+  Type              Status
+  Initialized       True 
+  Ready             True 
+  ContainersReady   True 
+  PodScheduled      True 
+Volumes:
+  kube-api-access-7tqtk:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              kubernetes.io/os=linux
+Tolerations:                 kubernetes.azure.com/scalesetpriority=spot:NoSchedule
+                             node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  16m   default-scheduler  Successfully assigned default/certmanager-cert-manager-webhook-74b6ddbb48-sp9gc to ip-10-0-183-212.us-east-2.compute.internal
+  Normal  Pulling    16m   kubelet            Pulling image "quay.io/jetstack/cert-manager-webhook:v1.11.1"
+  Normal  Pulled     16m   kubelet            Successfully pulled image "quay.io/jetstack/cert-manager-webhook:v1.11.1" in 3.366304633s (3.366317083s including waiting)
+  Normal  Created    16m   kubelet            Created container cert-manager-webhook
+  Normal  Started    16m   kubelet            Started container cert-manager-webhook

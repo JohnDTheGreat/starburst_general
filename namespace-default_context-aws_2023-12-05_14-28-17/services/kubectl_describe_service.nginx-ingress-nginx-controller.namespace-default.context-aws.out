@@ -1,0 +1,32 @@
+Name:                     nginx-ingress-nginx-controller
+Namespace:                default
+Labels:                   app.kubernetes.io/component=controller
+                          app.kubernetes.io/instance=nginx
+                          app.kubernetes.io/managed-by=Helm
+                          app.kubernetes.io/name=ingress-nginx
+                          app.kubernetes.io/part-of=ingress-nginx
+                          app.kubernetes.io/version=1.7.0
+                          helm.sh/chart=ingress-nginx-4.6.0
+Annotations:              meta.helm.sh/release-name: nginx
+                          meta.helm.sh/release-namespace: default
+Selector:                 app.kubernetes.io/component=controller,app.kubernetes.io/instance=nginx,app.kubernetes.io/name=ingress-nginx
+Type:                     LoadBalancer
+IP Family Policy:         SingleStack
+IP Families:              IPv4
+IP:                       172.20.64.4
+IPs:                      172.20.64.4
+LoadBalancer Ingress:     a41958bb20ba9410d81ce158ac84b026-1084060373.us-east-2.elb.amazonaws.com
+Port:                     http  80/TCP
+TargetPort:               http/TCP
+NodePort:                 http  31232/TCP
+Endpoints:                10.0.188.94:80
+Port:                     https  443/TCP
+TargetPort:               https/TCP
+NodePort:                 https  30774/TCP
+Endpoints:                10.0.188.94:443
+Session Affinity:         None
+External Traffic Policy:  Cluster
+Events:
+  Type    Reason               Age                 From                Message
+  ----    ------               ----                ----                -------
+  Normal  UpdatedLoadBalancer  17m (x84 over 20d)  service-controller  Updated load balancer with new hosts

@@ -1,0 +1,29 @@
+Name:                     starburst
+Namespace:                default
+Labels:                   app=starburst-enterprise
+                          app.kubernetes.io/managed-by=Helm
+                          helm-chart=starburst-enterprise-423.1.0
+                          helm-release=starburst
+                          managed-by=Helm
+                          role=coordinator
+Annotations:              meta.helm.sh/release-name: starburst
+                          meta.helm.sh/release-namespace: default
+                          service.beta.kubernetes.io/aws-load-balancer-backend-protocol: http
+                          service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:us-east-2:412911485778:certificate/0d7fe57c-e672-423e-a7ee-a5b8c49df9c2
+Selector:                 app=starburst-enterprise,helm-chart=starburst-enterprise-423.1.0,helm-release=starburst,managed-by=Helm,role=coordinator
+Type:                     LoadBalancer
+IP Family Policy:         SingleStack
+IP Families:              IPv4
+IP:                       172.20.225.129
+IPs:                      172.20.225.129
+LoadBalancer Ingress:     afedd9e65d7f84fa2b28bd196699a1a1-363147642.us-east-2.elb.amazonaws.com
+Port:                     http  8443/TCP
+TargetPort:               8080/TCP
+NodePort:                 http  32499/TCP
+Endpoints:                10.0.176.242:8080
+Session Affinity:         None
+External Traffic Policy:  Cluster
+Events:
+  Type    Reason               Age                  From                Message
+  ----    ------               ----                 ----                -------
+  Normal  UpdatedLoadBalancer  5m48s (x6 over 71m)  service-controller  Updated load balancer with new hosts

@@ -1,0 +1,140 @@
+Name:             worker-5d58dd7855-m9fw5
+Namespace:        default
+Priority:         0
+Service Account:  default
+Node:             ip-10-0-181-56.us-east-2.compute.internal/10.0.181.56
+Start Time:       Mon, 04 Dec 2023 18:06:07 -0500
+Labels:           app=starburst-enterprise
+                  helm-chart=starburst-enterprise-423.1.0
+                  helm-release=starburst
+                  managed-by=Helm
+                  pod-template-hash=5d58dd7855
+                  role=worker
+Annotations:      checksum/pullsecret: 355f9082932a897f8a2412547a0b3f1596698cd9b1b3bf448aab127b57d0e6d7
+                  checksum/worker-values: 1475cae5184acd361d6fd1925d677c0bc9b0e6174968bcf5c1b0f554ec3a1cc2
+Status:           Running
+IP:               10.0.183.98
+IPs:
+  IP:           10.0.183.98
+Controlled By:  ReplicaSet/worker-5d58dd7855
+Init Containers:
+  starburst-enterprise-init:
+    Container ID:  containerd://ce11915c642c4c7a4d035098b45cc88b0ab65502715a3bb03b436c46018a8d72
+    Image:         harbor.starburstdata.net/starburstdata/starburst-enterprise-init:1.5.2
+    Image ID:      harbor.starburstdata.net/starburstdata/starburst-enterprise-init@sha256:711c926528d7000e483fedd81ca68e8774be1ab2a7a11e8bde4e03d82f87315f
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      starburst-conf-cli
+      generate
+      --values-yaml
+      /work-dir/values.yaml
+      --config-type
+      WORKER
+      --starburst-config-dir
+      /etc/starburst
+      --starburst-license-dir
+      /starburst-license-json
+      --ip
+      $(POD_IP)
+      --k8s-namespace
+      $(POD_NAMESPACE)
+      --chart-version
+      423.1.0
+    State:          Terminated
+      Reason:       Completed
+      Exit Code:    0
+      Started:      Mon, 04 Dec 2023 18:06:16 -0500
+      Finished:     Mon, 04 Dec 2023 18:06:17 -0500
+    Ready:          True
+    Restart Count:  0
+    Limits:
+      memory:  4Gi
+    Requests:
+      cpu:     1
+      memory:  4Gi
+    Environment:
+      POD_IP:          (v1:status.podIP)
+      POD_NAMESPACE:  default (v1:metadata.namespace)
+    Mounts:
+      /etc/starburst from starburst-config-updated (rw)
+      /starburst-license-json from starburst-license-json (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-48wlk (ro)
+      /work-dir from starburst-config (rw)
+Containers:
+  worker:
+    Container ID:   containerd://fbb5dc7977f4b2e947e0abcfe3ce0f7954cc602d08f7f9b425b67f1f33559cd1
+    Image:          harbor.starburstdata.net/starburstdata/starburst-enterprise:423-e.1
+    Image ID:       harbor.starburstdata.net/starburstdata/starburst-enterprise@sha256:fe03dc7e8b3633732c5bcee4c14075ec31bedca128b4b2d7fac74be0edac3366
+    Ports:          8080/TCP, 8443/TCP
+    Host Ports:     0/TCP, 0/TCP
+    State:          Running
+      Started:      Mon, 04 Dec 2023 18:07:01 -0500
+    Ready:          True
+    Restart Count:  0
+    Limits:
+      memory:  4Gi
+    Requests:
+      cpu:      1
+      memory:   4Gi
+    Liveness:   http-get http://:8080/v1/info delay=0s timeout=5s period=60s #success=1 #failure=3
+    Readiness:  http-get http://:8080/v1/readiness delay=0s timeout=5s period=10s #success=1 #failure=3
+    Startup:    http-get http://:8080/v1/readiness delay=0s timeout=1s period=10s #success=1 #failure=40
+    Environment:
+      POD_ID:          (v1:metadata.uid)
+      POD_IP:          (v1:status.podIP)
+      POD_NAMESPACE:  default (v1:metadata.namespace)
+      NODE_IP:         (v1:status.hostIP)
+    Mounts:
+      /etc/starburst from starburst-config-updated (rw)
+      /etc/starburst/telemetry from prometheus-volume (rw)
+      /starburst-license-json from starburst-license-json (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-48wlk (ro)
+Conditions:
+  Type              Status
+  Initialized       True 
+  Ready             True 
+  ContainersReady   True 
+  PodScheduled      True 
+Volumes:
+  starburst-config:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  values-yaml-secret
+    Optional:    false
+  starburst-license-json:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  starburstdata
+    Optional:    false
+  starburst-config-updated:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:     
+    SizeLimit:  <unset>
+  prometheus-volume:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      starburst-worker-p8s
+    Optional:  false
+  kube-api-access-48wlk:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 kubernetes.azure.com/scalesetpriority=spot:NoSchedule
+                             node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age                   From               Message
+  ----     ------     ----                  ----               -------
+  Normal   Scheduled  5m15s                 default-scheduler  Successfully assigned default/worker-5d58dd7855-m9fw5 to ip-10-0-181-56.us-east-2.compute.internal
+  Normal   Pulling    5m14s                 kubelet            Pulling image "harbor.starburstdata.net/starburstdata/starburst-enterprise-init:1.5.2"
+  Normal   Pulled     5m6s                  kubelet            Successfully pulled image "harbor.starburstdata.net/starburstdata/starburst-enterprise-init:1.5.2" in 8.132481687s (8.132494746s including waiting)
+  Normal   Created    5m6s                  kubelet            Created container starburst-enterprise-init
+  Normal   Started    5m6s                  kubelet            Started container starburst-enterprise-init
+  Normal   Pulling    5m2s                  kubelet            Pulling image "harbor.starburstdata.net/starburstdata/starburst-enterprise:423-e.1"
+  Normal   Pulled     4m21s                 kubelet            Successfully pulled image "harbor.starburstdata.net/starburstdata/starburst-enterprise:423-e.1" in 41.242857967s (41.242868808s including waiting)
+  Normal   Created    4m21s                 kubelet            Created container worker
+  Normal   Started    4m21s                 kubelet            Started container worker
+  Warning  Unhealthy  4m13s                 kubelet            Startup probe failed: Get "http://10.0.183.98:8080/v1/readiness": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+  Warning  Unhealthy  3m54s (x2 over 4m4s)  kubelet            Startup probe failed: HTTP probe failed with statuscode: 503

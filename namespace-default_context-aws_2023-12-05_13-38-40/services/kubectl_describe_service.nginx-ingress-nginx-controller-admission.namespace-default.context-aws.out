@@ -1,0 +1,22 @@
+Name:              nginx-ingress-nginx-controller-admission
+Namespace:         default
+Labels:            app.kubernetes.io/component=controller
+                   app.kubernetes.io/instance=nginx
+                   app.kubernetes.io/managed-by=Helm
+                   app.kubernetes.io/name=ingress-nginx
+                   app.kubernetes.io/part-of=ingress-nginx
+                   app.kubernetes.io/version=1.7.0
+                   helm.sh/chart=ingress-nginx-4.6.0
+Annotations:       meta.helm.sh/release-name: nginx
+                   meta.helm.sh/release-namespace: default
+Selector:          app.kubernetes.io/component=controller,app.kubernetes.io/instance=nginx,app.kubernetes.io/name=ingress-nginx
+Type:              ClusterIP
+IP Family Policy:  SingleStack
+IP Families:       IPv4
+IP:                172.20.113.204
+IPs:               172.20.113.204
+Port:              https-webhook  443/TCP
+TargetPort:        webhook/TCP
+Endpoints:         10.0.189.160:8443
+Session Affinity:  None
+Events:            <none>

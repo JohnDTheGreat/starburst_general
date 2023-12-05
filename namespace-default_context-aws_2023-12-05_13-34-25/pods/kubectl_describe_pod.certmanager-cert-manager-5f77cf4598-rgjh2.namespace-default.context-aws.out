@@ -1,0 +1,72 @@
+Name:             certmanager-cert-manager-5f77cf4598-rgjh2
+Namespace:        default
+Priority:         0
+Service Account:  certmanager-cert-manager
+Node:             ip-10-0-188-41.us-east-2.compute.internal/10.0.188.41
+Start Time:       Tue, 05 Dec 2023 13:21:19 -0500
+Labels:           app=cert-manager
+                  app.kubernetes.io/component=controller
+                  app.kubernetes.io/instance=certmanager
+                  app.kubernetes.io/managed-by=Helm
+                  app.kubernetes.io/name=cert-manager
+                  app.kubernetes.io/version=v1.11.1
+                  helm.sh/chart=cert-manager-v1.11.1
+                  pod-template-hash=5f77cf4598
+Annotations:      prometheus.io/path: /metrics
+                  prometheus.io/port: 9402
+                  prometheus.io/scrape: true
+Status:           Running
+SeccompProfile:   RuntimeDefault
+IP:               10.0.179.77
+IPs:
+  IP:           10.0.179.77
+Controlled By:  ReplicaSet/certmanager-cert-manager-5f77cf4598
+Containers:
+  cert-manager-controller:
+    Container ID:  containerd://5b34748ed0deeffce26ce47abb0c493dbf7b8b82a802bbb8b0d8ce8829fb799c
+    Image:         quay.io/jetstack/cert-manager-controller:v1.11.1
+    Image ID:      quay.io/jetstack/cert-manager-controller@sha256:4f1782c8316f34aae6b9ab823c3e6b7e6e4d92ec5dac21de6a17c3da44c364f1
+    Port:          9402/TCP
+    Host Port:     0/TCP
+    Args:
+      --v=2
+      --cluster-resource-namespace=$(POD_NAMESPACE)
+      --leader-election-namespace=kube-system
+      --acme-http01-solver-image=quay.io/jetstack/cert-manager-acmesolver:v1.11.1
+      --max-concurrent-challenges=60
+    State:          Running
+      Started:      Tue, 05 Dec 2023 13:21:27 -0500
+    Ready:          True
+    Restart Count:  0
+    Environment:
+      POD_NAMESPACE:  default (v1:metadata.namespace)
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-58gms (ro)
+Conditions:
+  Type              Status
+  Initialized       True 
+  Ready             True 
+  ContainersReady   True 
+  PodScheduled      True 
+Volumes:
+  kube-api-access-58gms:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              kubernetes.io/os=linux
+Tolerations:                 kubernetes.azure.com/scalesetpriority=spot:NoSchedule
+                             node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason            Age                  From               Message
+  ----     ------            ----                 ----               -------
+  Warning  FailedScheduling  18m (x207 over 17h)  default-scheduler  no nodes available to schedule pods
+  Warning  FailedScheduling  13m                  default-scheduler  0/1 nodes are available: 1 node(s) had untolerated taint {node.cloudprovider.kubernetes.io/uninitialized: true}. preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling..
+  Normal   Scheduled         13m                  default-scheduler  Successfully assigned default/certmanager-cert-manager-5f77cf4598-rgjh2 to ip-10-0-188-41.us-east-2.compute.internal
+  Normal   Pulling           13m                  kubelet            Pulling image "quay.io/jetstack/cert-manager-controller:v1.11.1"
+  Normal   Pulled            13m                  kubelet            Successfully pulled image "quay.io/jetstack/cert-manager-controller:v1.11.1" in 5.598639627s (5.59865069s including waiting)
+  Normal   Created           13m                  kubelet            Created container cert-manager-controller
+  Normal   Started           13m                  kubelet            Started container cert-manager-controller

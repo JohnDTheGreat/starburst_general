@@ -1,0 +1,4 @@
+NAME                                         STATUS   ROLES    AGE   VERSION               INTERNAL-IP    EXTERNAL-IP   OS-IMAGE         KERNEL-VERSION                  CONTAINER-RUNTIME
+ip-10-0-179-155.us-east-2.compute.internal   Ready    <none>   13m   v1.27.4-eks-8ccc7ba   10.0.179.155   <none>        Amazon Linux 2   5.10.186-179.751.amzn2.x86_64   containerd://1.6.19
+ip-10-0-185-3.us-east-2.compute.internal     Ready    <none>   13m   v1.27.4-eks-8ccc7ba   10.0.185.3     <none>        Amazon Linux 2   5.10.186-179.751.amzn2.x86_64   containerd://1.6.19
+ip-10-0-188-41.us-east-2.compute.internal    Ready    <none>   13m   v1.27.4-eks-8ccc7ba   10.0.188.41    <none>        Amazon Linux 2   5.10.186-179.751.amzn2.x86_64   containerd://1.6.19

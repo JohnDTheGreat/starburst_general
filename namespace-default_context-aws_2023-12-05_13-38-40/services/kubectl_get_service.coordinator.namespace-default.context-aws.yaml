@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    meta.helm.sh/release-name: starburst
+    meta.helm.sh/release-namespace: default
+  creationTimestamp: "2023-11-27T21:10:24Z"
+  labels:
+    app: starburst-enterprise
+    app.kubernetes.io/managed-by: Helm
+    headless: "true"
+    helm-chart: starburst-enterprise-423.1.0
+    helm-release: starburst
+    managed-by: Helm
+    role: coordinator
+  name: coordinator
+  namespace: default
+  resourceVersion: "42537490"
+  uid: 6e61548e-8fd7-4801-b817-2f257f683a92
+spec:
+  clusterIP: None
+  clusterIPs:
+  - None
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  - name: https
+    port: 8443
+    protocol: TCP
+    targetPort: 8443
+  publishNotReadyAddresses: true
+  selector:
+    app: starburst-enterprise
+    helm-chart: starburst-enterprise-423.1.0
+    helm-release: starburst
+    managed-by: Helm
+    role: coordinator
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}

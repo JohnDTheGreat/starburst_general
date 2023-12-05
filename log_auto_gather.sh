@@ -7,17 +7,22 @@
 K8CONTEXT=""
 K8NAMESPACE=""
 # For testing
-K8CONTEXT="aws"
-K8NAMESPACE="default"
+# K8CONTEXT="aws"
+# K8NAMESPACE="default"
 
 #Get input from command line options to set variables
-while getopts ":c:n:" opt; do
+while getopts ":c:n:h" opt; do
   case $opt in
     c) K8CONTEXT="$OPTARG"
     ;;
     n) K8NAMESPACE="$OPTARG"
     ;;
+    h) echo "Usage: log_auto_gather.sh -c <kubernetes context> -n <kubernetes namespace>"
+    exit 1
+    ;;
     \?) echo "Invalid option -$OPTARG" >&2
+    echo "Usage: log_auto_gather.sh -c <kubernetes context> -n <kubernetes namespace>"
+    exit 1
     ;;
   esac
 done
@@ -87,7 +92,7 @@ kubectl get nodes --context $K8CONTEXT -o wide &> $NODEDIR/kubectl_get_nodes.con
 print_msg "Getting describes and yaml for pods"
 for pod in $PODS
 do
-  kubectl describe pod $pod -n $K8NAMESPACE --context $K8CONTEXT \ 
+  kubectl describe pod $pod -n $K8NAMESPACE --context $K8CONTEXT \
   &> $PODDIR/kubectl_describe_pod.$pod.namespace-$K8NAMESPACE.context-$K8CONTEXT.out
   kubectl get pod $pod -n $K8NAMESPACE --context $K8CONTEXT -o yaml \
   &> $PODDIR/kubectl_get_pod.$pod.namespace-$K8NAMESPACE.context-$K8CONTEXT.yaml
@@ -146,7 +151,7 @@ print_msg "Pods we will be collecting information against: \n$PODS"
 # Loop through pods and get container names then get logs for each container
 for pod in $PODS
 do
-  print_msg "Getting logs for pod: \n$pod"
+  print_msg "Getting logs for pod: $pod"
   CONTAINERS=$(kubectl get pods $pod -n $K8NAMESPACE --context $K8CONTEXT -o jsonpath='{.spec.initContainers[*].name} {.spec.containers[*].name}')
   print_msg "Containers in pod $pod:"
   for container in $CONTAINERS 
@@ -161,6 +166,11 @@ do
     print_msg "Log collected for container: $container and saved to: $LOGDIR/$FILENAME"
   done
 done 
+
+# Tar and gzip bundle directory
+print_msg "Tarring and gzipping bundle directory"
+tar -czvf $BUNDLE.tar.gz $BUNDLE
+print_msg "Bundle is packaged as file: $BUNDLE.tar.gz"
 
 
 

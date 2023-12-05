@@ -1,0 +1,85 @@
+LAST SEEN   TYPE      REASON                    OBJECT                                                      MESSAGE
+16m         Normal    Killing                   pod/certmanager-cert-manager-5f77cf4598-rgjh2               Stopping container cert-manager-controller
+16m         Normal    Scheduled                 pod/certmanager-cert-manager-5f77cf4598-tbz6l               Successfully assigned default/certmanager-cert-manager-5f77cf4598-tbz6l to ip-10-0-183-212.us-east-2.compute.internal
+16m         Normal    Pulling                   pod/certmanager-cert-manager-5f77cf4598-tbz6l               Pulling image "quay.io/jetstack/cert-manager-controller:v1.11.1"
+16m         Normal    Pulled                    pod/certmanager-cert-manager-5f77cf4598-tbz6l               Successfully pulled image "quay.io/jetstack/cert-manager-controller:v1.11.1" in 5.127420041s (5.127430571s including waiting)
+16m         Normal    Created                   pod/certmanager-cert-manager-5f77cf4598-tbz6l               Created container cert-manager-controller
+16m         Normal    Started                   pod/certmanager-cert-manager-5f77cf4598-tbz6l               Started container cert-manager-controller
+16m         Normal    SuccessfulCreate          replicaset/certmanager-cert-manager-5f77cf4598              Created pod: certmanager-cert-manager-5f77cf4598-tbz6l
+16m         Normal    Killing                   pod/certmanager-cert-manager-cainjector-558bf5b55d-f2bx5    Stopping container cert-manager-cainjector
+16m         Normal    Scheduled                 pod/certmanager-cert-manager-cainjector-558bf5b55d-xmhm8    Successfully assigned default/certmanager-cert-manager-cainjector-558bf5b55d-xmhm8 to ip-10-0-183-212.us-east-2.compute.internal
+16m         Normal    Pulling                   pod/certmanager-cert-manager-cainjector-558bf5b55d-xmhm8    Pulling image "quay.io/jetstack/cert-manager-cainjector:v1.11.1"
+16m         Normal    Pulled                    pod/certmanager-cert-manager-cainjector-558bf5b55d-xmhm8    Successfully pulled image "quay.io/jetstack/cert-manager-cainjector:v1.11.1" in 2.416898827s (2.416911437s including waiting)
+16m         Normal    Created                   pod/certmanager-cert-manager-cainjector-558bf5b55d-xmhm8    Created container cert-manager-cainjector
+16m         Normal    Started                   pod/certmanager-cert-manager-cainjector-558bf5b55d-xmhm8    Started container cert-manager-cainjector
+16m         Normal    SuccessfulCreate          replicaset/certmanager-cert-manager-cainjector-558bf5b55d   Created pod: certmanager-cert-manager-cainjector-558bf5b55d-xmhm8
+16m         Normal    Killing                   pod/certmanager-cert-manager-webhook-74b6ddbb48-hjh5x       Stopping container cert-manager-webhook
+16m         Normal    Scheduled                 pod/certmanager-cert-manager-webhook-74b6ddbb48-sp9gc       Successfully assigned default/certmanager-cert-manager-webhook-74b6ddbb48-sp9gc to ip-10-0-183-212.us-east-2.compute.internal
+16m         Normal    Pulling                   pod/certmanager-cert-manager-webhook-74b6ddbb48-sp9gc       Pulling image "quay.io/jetstack/cert-manager-webhook:v1.11.1"
+16m         Normal    Pulled                    pod/certmanager-cert-manager-webhook-74b6ddbb48-sp9gc       Successfully pulled image "quay.io/jetstack/cert-manager-webhook:v1.11.1" in 3.366304633s (3.366317083s including waiting)
+16m         Normal    Created                   pod/certmanager-cert-manager-webhook-74b6ddbb48-sp9gc       Created container cert-manager-webhook
+16m         Normal    Started                   pod/certmanager-cert-manager-webhook-74b6ddbb48-sp9gc       Started container cert-manager-webhook
+16m         Normal    SuccessfulCreate          replicaset/certmanager-cert-manager-webhook-74b6ddbb48      Created pod: certmanager-cert-manager-webhook-74b6ddbb48-sp9gc
+16m         Warning   FailedToUpdateEndpoint    endpoints/certmanager-cert-manager                          Failed to update endpoint default/certmanager-cert-manager: Operation cannot be fulfilled on endpoints "certmanager-cert-manager": the object has been modified; please apply your changes to the latest version and try again
+16m         Normal    Killing                   pod/externaldns-external-dns-656c894cb-bl822                Stopping container external-dns
+16m         Normal    Scheduled                 pod/externaldns-external-dns-656c894cb-rmz2s                Successfully assigned default/externaldns-external-dns-656c894cb-rmz2s to ip-10-0-183-212.us-east-2.compute.internal
+16m         Normal    Pulling                   pod/externaldns-external-dns-656c894cb-rmz2s                Pulling image "docker.io/bitnami/external-dns:0.13.4-debian-11-r2"
+16m         Normal    Pulled                    pod/externaldns-external-dns-656c894cb-rmz2s                Successfully pulled image "docker.io/bitnami/external-dns:0.13.4-debian-11-r2" in 10.202467288s (10.202502488s including waiting)
+16m         Normal    Created                   pod/externaldns-external-dns-656c894cb-rmz2s                Created container external-dns
+16m         Normal    Started                   pod/externaldns-external-dns-656c894cb-rmz2s                Started container external-dns
+16m         Normal    SuccessfulCreate          replicaset/externaldns-external-dns-656c894cb               Created pod: externaldns-external-dns-656c894cb-rmz2s
+16m         Normal    Killing                   pod/hive-566c674cc9-b5878                                   Stopping container hive
+16m         Normal    Scheduled                 pod/hive-566c674cc9-m29rn                                   Successfully assigned default/hive-566c674cc9-m29rn to ip-10-0-183-212.us-east-2.compute.internal
+16m         Normal    Pulling                   pod/hive-566c674cc9-m29rn                                   Pulling image "harbor.starburstdata.net/starburstdata/hive:3.1.3-e.2"
+15m         Normal    Pulled                    pod/hive-566c674cc9-m29rn                                   Successfully pulled image "harbor.starburstdata.net/starburstdata/hive:3.1.3-e.2" in 41.261144582s (41.261155442s including waiting)
+15m         Normal    Created                   pod/hive-566c674cc9-m29rn                                   Created container hive
+15m         Normal    Started                   pod/hive-566c674cc9-m29rn                                   Started container hive
+16m         Normal    SuccessfulCreate          replicaset/hive-566c674cc9                                  Created pod: hive-566c674cc9-m29rn
+22m         Normal    Starting                  node/ip-10-0-176-225.us-east-2.compute.internal             Starting kubelet.
+22m         Warning   InvalidDiskCapacity       node/ip-10-0-176-225.us-east-2.compute.internal             invalid capacity 0 on image filesystem
+22m         Normal    NodeHasSufficientMemory   node/ip-10-0-176-225.us-east-2.compute.internal             Node ip-10-0-176-225.us-east-2.compute.internal status is now: NodeHasSufficientMemory
+22m         Normal    NodeHasNoDiskPressure     node/ip-10-0-176-225.us-east-2.compute.internal             Node ip-10-0-176-225.us-east-2.compute.internal status is now: NodeHasNoDiskPressure
+22m         Normal    NodeHasSufficientPID      node/ip-10-0-176-225.us-east-2.compute.internal             Node ip-10-0-176-225.us-east-2.compute.internal status is now: NodeHasSufficientPID
+22m         Normal    NodeAllocatableEnforced   node/ip-10-0-176-225.us-east-2.compute.internal             Updated Node Allocatable limit across pods
+22m         Normal    Synced                    node/ip-10-0-176-225.us-east-2.compute.internal             Node synced successfully
+22m         Normal    RegisteredNode            node/ip-10-0-176-225.us-east-2.compute.internal             Node ip-10-0-176-225.us-east-2.compute.internal event: Registered Node ip-10-0-176-225.us-east-2.compute.internal in Controller
+22m         Normal    Starting                  node/ip-10-0-176-225.us-east-2.compute.internal             
+21m         Normal    NodeReady                 node/ip-10-0-176-225.us-east-2.compute.internal             Node ip-10-0-176-225.us-east-2.compute.internal status is now: NodeReady
+19m         Normal    NodeNotReady              node/ip-10-0-179-155.us-east-2.compute.internal             Node ip-10-0-179-155.us-east-2.compute.internal status is now: NodeNotReady
+17m         Normal    DeletingNode              node/ip-10-0-179-155.us-east-2.compute.internal             Deleting node ip-10-0-179-155.us-east-2.compute.internal because it does not exist in the cloud provider
+17m         Normal    RemovingNode              node/ip-10-0-179-155.us-east-2.compute.internal             Node ip-10-0-179-155.us-east-2.compute.internal event: Removing Node ip-10-0-179-155.us-east-2.compute.internal from Controller
+18m         Normal    Starting                  node/ip-10-0-183-212.us-east-2.compute.internal             Starting kubelet.
+18m         Warning   InvalidDiskCapacity       node/ip-10-0-183-212.us-east-2.compute.internal             invalid capacity 0 on image filesystem
+18m         Normal    NodeHasSufficientMemory   node/ip-10-0-183-212.us-east-2.compute.internal             Node ip-10-0-183-212.us-east-2.compute.internal status is now: NodeHasSufficientMemory
+18m         Normal    NodeHasNoDiskPressure     node/ip-10-0-183-212.us-east-2.compute.internal             Node ip-10-0-183-212.us-east-2.compute.internal status is now: NodeHasNoDiskPressure
+18m         Normal    NodeHasSufficientPID      node/ip-10-0-183-212.us-east-2.compute.internal             Node ip-10-0-183-212.us-east-2.compute.internal status is now: NodeHasSufficientPID
+18m         Normal    NodeAllocatableEnforced   node/ip-10-0-183-212.us-east-2.compute.internal             Updated Node Allocatable limit across pods
+18m         Normal    Synced                    node/ip-10-0-183-212.us-east-2.compute.internal             Node synced successfully
+18m         Normal    RegisteredNode            node/ip-10-0-183-212.us-east-2.compute.internal             Node ip-10-0-183-212.us-east-2.compute.internal event: Registered Node ip-10-0-183-212.us-east-2.compute.internal in Controller
+18m         Normal    Starting                  node/ip-10-0-183-212.us-east-2.compute.internal             
+18m         Normal    NodeReady                 node/ip-10-0-183-212.us-east-2.compute.internal             Node ip-10-0-183-212.us-east-2.compute.internal status is now: NodeReady
+16m         Normal    NodeNotSchedulable        node/ip-10-0-188-41.us-east-2.compute.internal              Node ip-10-0-188-41.us-east-2.compute.internal status is now: NodeNotSchedulable
+15m         Normal    NodeNotReady              node/ip-10-0-188-41.us-east-2.compute.internal              Node ip-10-0-188-41.us-east-2.compute.internal status is now: NodeNotReady
+12m         Normal    DeletingNode              node/ip-10-0-188-41.us-east-2.compute.internal              Deleting node ip-10-0-188-41.us-east-2.compute.internal because it does not exist in the cloud provider
+12m         Normal    RemovingNode              node/ip-10-0-188-41.us-east-2.compute.internal              Node ip-10-0-188-41.us-east-2.compute.internal event: Removing Node ip-10-0-188-41.us-east-2.compute.internal from Controller
+16m         Normal    Killing                   pod/nginx-ingress-nginx-controller-6547cdd79b-lbt69         Stopping container controller
+16m         Warning   Unhealthy                 pod/nginx-ingress-nginx-controller-6547cdd79b-lbt69         Readiness probe failed: HTTP probe failed with statuscode: 500
+16m         Normal    Scheduled                 pod/nginx-ingress-nginx-controller-6547cdd79b-mz9pt         Successfully assigned default/nginx-ingress-nginx-controller-6547cdd79b-mz9pt to ip-10-0-183-212.us-east-2.compute.internal
+16m         Normal    Pulling                   pod/nginx-ingress-nginx-controller-6547cdd79b-mz9pt         Pulling image "registry.k8s.io/ingress-nginx/controller:v1.7.0@sha256:7612338342a1e7b8090bef78f2a04fffcadd548ccaabe8a47bf7758ff549a5f7"
+16m         Normal    Pulled                    pod/nginx-ingress-nginx-controller-6547cdd79b-mz9pt         Successfully pulled image "registry.k8s.io/ingress-nginx/controller:v1.7.0@sha256:7612338342a1e7b8090bef78f2a04fffcadd548ccaabe8a47bf7758ff549a5f7" in 22.291483891s (22.291498281s including waiting)
+16m         Normal    Created                   pod/nginx-ingress-nginx-controller-6547cdd79b-mz9pt         Created container controller
+16m         Normal    Started                   pod/nginx-ingress-nginx-controller-6547cdd79b-mz9pt         Started container controller
+16m         Normal    RELOAD                    pod/nginx-ingress-nginx-controller-6547cdd79b-mz9pt         NGINX reload triggered due to a change in configuration
+16m         Normal    SuccessfulCreate          replicaset/nginx-ingress-nginx-controller-6547cdd79b        Created pod: nginx-ingress-nginx-controller-6547cdd79b-mz9pt
+16m         Normal    UpdatedLoadBalancer       service/nginx-ingress-nginx-controller                      Updated load balancer with new hosts
+16m         Normal    CREATE                    configmap/nginx-ingress-nginx-controller                    ConfigMap default/nginx-ingress-nginx-controller
+16m         Normal    Killing                   pod/ranger-7855c458d8-kt2qk                                 Stopping container ranger-admin
+16m         Normal    Scheduled                 pod/ranger-7855c458d8-t8w76                                 Successfully assigned default/ranger-7855c458d8-t8w76 to ip-10-0-183-212.us-east-2.compute.internal
+16m         Normal    Pulling                   pod/ranger-7855c458d8-t8w76                                 Pulling image "harbor.starburstdata.net/starburstdata/starburst-ranger-admin:2.3.0-e.5"
+15m         Normal    Pulled                    pod/ranger-7855c458d8-t8w76                                 Successfully pulled image "harbor.starburstdata.net/starburstdata/starburst-ranger-admin:2.3.0-e.5" in 43.375123661s (43.375133952s including waiting)
+15m         Normal    Created                   pod/ranger-7855c458d8-t8w76                                 Created container ranger-admin
+15m         Normal    Started                   pod/ranger-7855c458d8-t8w76                                 Started container ranger-admin
+14m         Warning   Unhealthy                 pod/ranger-7855c458d8-t8w76                                 Startup probe failed: grep: /opt/ranger/starburst-ranger-server-admin-*/ews/logs/start.sh.log: No such file or directory
+16m         Normal    SuccessfulCreate          replicaset/ranger-7855c458d8                                Created pod: ranger-7855c458d8-t8w76
+16m         Normal    UpdatedLoadBalancer       service/ranger                                              Updated load balancer with new hosts
+16m         Normal    UpdatedLoadBalancer       service/starburst                                           Updated load balancer with new hosts

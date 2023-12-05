@@ -1,0 +1,84 @@
+Name:             nginx-ingress-nginx-controller-6547cdd79b-mz9pt
+Namespace:        default
+Priority:         0
+Service Account:  nginx-ingress-nginx
+Node:             ip-10-0-183-212.us-east-2.compute.internal/10.0.183.212
+Start Time:       Tue, 05 Dec 2023 14:11:38 -0500
+Labels:           app.kubernetes.io/component=controller
+                  app.kubernetes.io/instance=nginx
+                  app.kubernetes.io/managed-by=Helm
+                  app.kubernetes.io/name=ingress-nginx
+                  app.kubernetes.io/part-of=ingress-nginx
+                  app.kubernetes.io/version=1.7.0
+                  helm.sh/chart=ingress-nginx-4.6.0
+                  pod-template-hash=6547cdd79b
+Annotations:      <none>
+Status:           Running
+IP:               10.0.188.94
+IPs:
+  IP:           10.0.188.94
+Controlled By:  ReplicaSet/nginx-ingress-nginx-controller-6547cdd79b
+Containers:
+  controller:
+    Container ID:  containerd://eacf2aeb5f4bf3833f324746e99dc652a96c0f487023eb3e9f8c215f34672087
+    Image:         registry.k8s.io/ingress-nginx/controller:v1.7.0@sha256:7612338342a1e7b8090bef78f2a04fffcadd548ccaabe8a47bf7758ff549a5f7
+    Image ID:      registry.k8s.io/ingress-nginx/controller@sha256:7612338342a1e7b8090bef78f2a04fffcadd548ccaabe8a47bf7758ff549a5f7
+    Ports:         80/TCP, 443/TCP, 8443/TCP
+    Host Ports:    0/TCP, 0/TCP, 0/TCP
+    Args:
+      /nginx-ingress-controller
+      --publish-service=$(POD_NAMESPACE)/nginx-ingress-nginx-controller
+      --election-id=nginx-ingress-nginx-leader
+      --controller-class=k8s.io/ingress-nginx
+      --ingress-class=nginx
+      --configmap=$(POD_NAMESPACE)/nginx-ingress-nginx-controller
+      --validating-webhook=:8443
+      --validating-webhook-certificate=/usr/local/certificates/cert
+      --validating-webhook-key=/usr/local/certificates/key
+    State:          Running
+      Started:      Tue, 05 Dec 2023 14:12:02 -0500
+    Ready:          True
+    Restart Count:  0
+    Requests:
+      cpu:      100m
+      memory:   90Mi
+    Liveness:   http-get http://:10254/healthz delay=10s timeout=1s period=10s #success=1 #failure=5
+    Readiness:  http-get http://:10254/healthz delay=10s timeout=1s period=10s #success=1 #failure=3
+    Environment:
+      POD_NAME:       nginx-ingress-nginx-controller-6547cdd79b-mz9pt (v1:metadata.name)
+      POD_NAMESPACE:  default (v1:metadata.namespace)
+      LD_PRELOAD:     /usr/local/lib/libmimalloc.so
+    Mounts:
+      /usr/local/certificates/ from webhook-cert (ro)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-l6mtw (ro)
+Conditions:
+  Type              Status
+  Initialized       True 
+  Ready             True 
+  ContainersReady   True 
+  PodScheduled      True 
+Volumes:
+  webhook-cert:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  nginx-ingress-nginx-admission
+    Optional:    false
+  kube-api-access-l6mtw:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              kubernetes.io/os=linux
+Tolerations:                 kubernetes.azure.com/scalesetpriority=spot:NoSchedule
+                             node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From                      Message
+  ----    ------     ----  ----                      -------
+  Normal  Scheduled  17m   default-scheduler         Successfully assigned default/nginx-ingress-nginx-controller-6547cdd79b-mz9pt to ip-10-0-183-212.us-east-2.compute.internal
+  Normal  Pulling    17m   kubelet                   Pulling image "registry.k8s.io/ingress-nginx/controller:v1.7.0@sha256:7612338342a1e7b8090bef78f2a04fffcadd548ccaabe8a47bf7758ff549a5f7"
+  Normal  Pulled     16m   kubelet                   Successfully pulled image "registry.k8s.io/ingress-nginx/controller:v1.7.0@sha256:7612338342a1e7b8090bef78f2a04fffcadd548ccaabe8a47bf7758ff549a5f7" in 22.291483891s (22.291498281s including waiting)
+  Normal  Created    16m   kubelet                   Created container controller
+  Normal  Started    16m   kubelet                   Started container controller
+  Normal  RELOAD     16m   nginx-ingress-controller  NGINX reload triggered due to a change in configuration

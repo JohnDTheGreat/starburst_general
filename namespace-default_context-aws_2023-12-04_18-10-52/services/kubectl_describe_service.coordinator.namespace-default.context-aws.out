@@ -1,0 +1,25 @@
+Name:              coordinator
+Namespace:         default
+Labels:            app=starburst-enterprise
+                   app.kubernetes.io/managed-by=Helm
+                   headless=true
+                   helm-chart=starburst-enterprise-423.1.0
+                   helm-release=starburst
+                   managed-by=Helm
+                   role=coordinator
+Annotations:       meta.helm.sh/release-name: starburst
+                   meta.helm.sh/release-namespace: default
+Selector:          app=starburst-enterprise,helm-chart=starburst-enterprise-423.1.0,helm-release=starburst,managed-by=Helm,role=coordinator
+Type:              ClusterIP
+IP Family Policy:  SingleStack
+IP Families:       IPv4
+IP:                None
+IPs:               None
+Port:              http  8080/TCP
+TargetPort:        8080/TCP
+Endpoints:         10.0.176.242:8080
+Port:              https  8443/TCP
+TargetPort:        8443/TCP
+Endpoints:         10.0.176.242:8443
+Session Affinity:  None
+Events:            <none>

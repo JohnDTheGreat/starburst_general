@@ -1,0 +1,21 @@
+Name:              prometheus-coordinator-starburst
+Namespace:         default
+Labels:            app=starburst-enterprise
+                   app.kubernetes.io/managed-by=Helm
+                   helm-chart=starburst-enterprise-423.1.0
+                   helm-release=starburst
+                   managed-by=Helm
+                   role=prometheus-coordinator
+Annotations:       meta.helm.sh/release-name: starburst
+                   meta.helm.sh/release-namespace: default
+Selector:          app=starburst-enterprise,helm-chart=starburst-enterprise-423.1.0,helm-release=starburst,managed-by=Helm,role=coordinator
+Type:              ClusterIP
+IP Family Policy:  SingleStack
+IP Families:       IPv4
+IP:                172.20.47.84
+IPs:               172.20.47.84
+Port:              metrics  8081/TCP
+TargetPort:        8081/TCP
+Endpoints:         10.0.186.177:8081
+Session Affinity:  None
+Events:            <none>

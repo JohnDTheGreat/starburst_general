@@ -1,0 +1,65 @@
+Name:             certmanager-cert-manager-webhook-74b6ddbb48-5zr8r
+Namespace:        default
+Priority:         0
+Service Account:  certmanager-cert-manager-webhook
+Node:             ip-10-0-189-79.us-east-2.compute.internal/10.0.189.79
+Start Time:       Mon, 04 Dec 2023 17:02:21 -0500
+Labels:           app=webhook
+                  app.kubernetes.io/component=webhook
+                  app.kubernetes.io/instance=certmanager
+                  app.kubernetes.io/managed-by=Helm
+                  app.kubernetes.io/name=webhook
+                  app.kubernetes.io/version=v1.11.1
+                  helm.sh/chart=cert-manager-v1.11.1
+                  pod-template-hash=74b6ddbb48
+Annotations:      <none>
+Status:           Running
+SeccompProfile:   RuntimeDefault
+IP:               10.0.177.36
+IPs:
+  IP:           10.0.177.36
+Controlled By:  ReplicaSet/certmanager-cert-manager-webhook-74b6ddbb48
+Containers:
+  cert-manager-webhook:
+    Container ID:  containerd://ed1956db25ce3a8e013ba9d9143cf88b4aa32c7b2bbaaed3017e79153201ff3a
+    Image:         quay.io/jetstack/cert-manager-webhook:v1.11.1
+    Image ID:      quay.io/jetstack/cert-manager-webhook@sha256:856ae76ee31ae383f7a2505d8a6e8d9961413cbe760219372732ec982b202ef1
+    Ports:         10250/TCP, 6080/TCP
+    Host Ports:    0/TCP, 0/TCP
+    Args:
+      --v=2
+      --secure-port=10250
+      --dynamic-serving-ca-secret-namespace=$(POD_NAMESPACE)
+      --dynamic-serving-ca-secret-name=certmanager-cert-manager-webhook-ca
+      --dynamic-serving-dns-names=certmanager-cert-manager-webhook
+      --dynamic-serving-dns-names=certmanager-cert-manager-webhook.$(POD_NAMESPACE)
+      --dynamic-serving-dns-names=certmanager-cert-manager-webhook.$(POD_NAMESPACE).svc
+    State:          Running
+      Started:      Mon, 04 Dec 2023 17:02:33 -0500
+    Ready:          True
+    Restart Count:  0
+    Liveness:       http-get http://:6080/livez delay=60s timeout=1s period=10s #success=1 #failure=3
+    Readiness:      http-get http://:6080/healthz delay=5s timeout=1s period=5s #success=1 #failure=3
+    Environment:
+      POD_NAMESPACE:  default (v1:metadata.namespace)
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-xf6ld (ro)
+Conditions:
+  Type              Status
+  Initialized       True 
+  Ready             True 
+  ContainersReady   True 
+  PodScheduled      True 
+Volumes:
+  kube-api-access-xf6ld:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              kubernetes.io/os=linux
+Tolerations:                 kubernetes.azure.com/scalesetpriority=spot:NoSchedule
+                             node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:                      <none>

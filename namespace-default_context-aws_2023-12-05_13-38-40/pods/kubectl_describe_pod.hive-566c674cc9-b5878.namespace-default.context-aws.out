@@ -1,0 +1,94 @@
+Name:             hive-566c674cc9-b5878
+Namespace:        default
+Priority:         0
+Service Account:  default
+Node:             ip-10-0-188-41.us-east-2.compute.internal/10.0.188.41
+Start Time:       Tue, 05 Dec 2023 13:21:19 -0500
+Labels:           app=starburst-hive
+                  helm-chart=starburst-hive-411.0.0
+                  helm-release=hive
+                  managed-by=Helm
+                  pod-template-hash=566c674cc9
+                  role=hive
+Annotations:      checksum/init-file: 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b
+                  checksum/registry-secret: ff9f180bcbdd5260e743e472b67fed1abebf4e41b9654cfa21382098f2181644
+Status:           Running
+IP:               10.0.188.151
+IPs:
+  IP:           10.0.188.151
+Controlled By:  ReplicaSet/hive-566c674cc9
+Containers:
+  hive:
+    Container ID:   containerd://b4ec4b214ee48d509de76aae28eefadc3970f715abc0bcb3669d43c575c9006e
+    Image:          harbor.starburstdata.net/starburstdata/hive:3.1.3-e.2
+    Image ID:       harbor.starburstdata.net/starburstdata/hive@sha256:f5952a5cb6bb3973a5e21b85ab369e28b7dd7f45e705a82b4f7fed83962058b0
+    Port:           9083/TCP
+    Host Port:      0/TCP
+    State:          Running
+      Started:      Tue, 05 Dec 2023 13:22:01 -0500
+    Ready:          True
+    Restart Count:  0
+    Limits:
+      cpu:     1
+      memory:  1Gi
+    Requests:
+      cpu:     250m
+      memory:  1Gi
+    Liveness:  tcp-socket :9083 delay=120s timeout=1s period=10s #success=1 #failure=3
+    Environment:
+      HIVE_METASTORE_JDBC_URL:               jdbc:postgresql://johndee-burks-bootcamp-postgresql.cs8j7iukogcy.us-east-2.rds.amazonaws.com:5432/eks_hms
+      HIVE_METASTORE_DRIVER:                 org.postgresql.Driver
+      HIVE_METASTORE_USER:                   postgres
+      HIVE_METASTORE_PASSWORD:               <set to the key 'databasePassword' in secret 'hive-database-password'>  Optional: false
+      HIVE_METASTORE_WAREHOUSE_DIR:          
+      HIVE_METASTORE_STORAGE_AUTHORIZATION:  true
+      REGION:                                us-east-2
+      S3_ENDPOINT:                           s3.us-east-2.amazonaws.com
+      S3_ACCESS_KEY:                         
+      S3_SECRET_KEY:                         <set to the key 'awsS3.secretKey' in secret 'hive-object-storage-secret'>  Optional: false
+      S3_PATH_STYLE_ACCESS:                  false
+      GOOGLE_CLOUD_KEY_FILE_PATH:            /gcs-keyfile/key.json
+      AZURE_ABFS_OAUTH:                      
+      AZURE_ABFS_OAUTH_TOKEN_PROVIDER:       
+      AZURE_ABFS_STORAGE_ACCOUNT:            
+      AZURE_ABFS_ACCESS_KEY:                 <set to the key 'azure.abfs.accessKey.accessKey' in secret 'hive-object-storage-secret'>  Optional: false
+      AZURE_ABFS_OAUTH_CLIENT_ID:            
+      AZURE_ABFS_OAUTH_SECRET:               <set to the key 'azure.abfs.oauth.secret' in secret 'hive-object-storage-secret'>  Optional: false
+      AZURE_ABFS_OAUTH_ENDPOINT:             
+      AZURE_WASB_STORAGE_ACCOUNT:            
+      AZURE_WASB_ACCESS_KEY:                 <set to the key 'azure.wasb.accessKey' in secret 'hive-object-storage-secret'>  Optional: false
+      AZURE_ADL_CLIENT_ID:                   
+      AZURE_ADL_CREDENTIAL:                  <set to the key 'adl.oauth2.credential' in secret 'hive-object-storage-secret'>  Optional: false
+      AZURE_ADL_REFRESH_URL:                 
+      HIVE_METASTORE_HEAPSIZE_IN_KB:         891289
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-dj8v5 (ro)
+Conditions:
+  Type              Status
+  Initialized       True 
+  Ready             True 
+  ContainersReady   True 
+  PodScheduled      True 
+Volumes:
+  kube-api-access-dj8v5:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 kubernetes.azure.com/scalesetpriority=spot:NoSchedule
+                             node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason            Age                  From               Message
+  ----     ------            ----                 ----               -------
+  Warning  FailedScheduling  22m (x207 over 17h)  default-scheduler  no nodes available to schedule pods
+  Warning  FailedScheduling  18m                  default-scheduler  0/1 nodes are available: 1 node(s) had untolerated taint {node.cloudprovider.kubernetes.io/uninitialized: true}. preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling..
+  Normal   Scheduled         17m                  default-scheduler  Successfully assigned default/hive-566c674cc9-b5878 to ip-10-0-188-41.us-east-2.compute.internal
+  Normal   Pulling           17m                  kubelet            Pulling image "harbor.starburstdata.net/starburstdata/hive:3.1.3-e.2"
+  Normal   Pulled            17m                  kubelet            Successfully pulled image "harbor.starburstdata.net/starburstdata/hive:3.1.3-e.2" in 40.582645069s (40.582655059s including waiting)
+  Normal   Created           17m                  kubelet            Created container hive
+  Normal   Started           17m                  kubelet            Started container hive
+  Warning  Unhealthy         14m                  kubelet            Liveness probe failed: dial tcp 10.0.188.151:9083: connect: connection refused

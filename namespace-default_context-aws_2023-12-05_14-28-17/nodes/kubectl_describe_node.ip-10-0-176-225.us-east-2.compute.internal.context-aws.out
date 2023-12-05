@@ -1,0 +1,96 @@
+Name:               ip-10-0-176-225.us-east-2.compute.internal
+Roles:              <none>
+Labels:             alpha.eksctl.io/cluster-name=johndee-burks-lab01
+                    alpha.eksctl.io/nodegroup-name=sep
+                    apps=sep
+                    beta.kubernetes.io/arch=amd64
+                    beta.kubernetes.io/instance-type=m5ad.xlarge
+                    beta.kubernetes.io/os=linux
+                    eks.amazonaws.com/capacityType=SPOT
+                    eks.amazonaws.com/nodegroup=sep
+                    eks.amazonaws.com/nodegroup-image=ami-09d80224b8fe20ffb
+                    eks.amazonaws.com/sourceLaunchTemplateId=lt-0f1f8c53f654d6bc5
+                    eks.amazonaws.com/sourceLaunchTemplateVersion=1
+                    failure-domain.beta.kubernetes.io/region=us-east-2
+                    failure-domain.beta.kubernetes.io/zone=us-east-2c
+                    k8s.io/cloud-provider-aws=74a2e788da539a33579b6e0ea15571c4
+                    kubernetes.io/arch=amd64
+                    kubernetes.io/hostname=ip-10-0-176-225.us-east-2.compute.internal
+                    kubernetes.io/os=linux
+                    node.kubernetes.io/instance-type=m5ad.xlarge
+                    topology.kubernetes.io/region=us-east-2
+                    topology.kubernetes.io/zone=us-east-2c
+Annotations:        alpha.kubernetes.io/provided-node-ip: 10.0.176.225
+                    node.alpha.kubernetes.io/ttl: 0
+                    volumes.kubernetes.io/controller-managed-attach-detach: true
+CreationTimestamp:  Tue, 05 Dec 2023 14:06:05 -0500
+Taints:             <none>
+Unschedulable:      false
+Lease:
+  HolderIdentity:  ip-10-0-176-225.us-east-2.compute.internal
+  AcquireTime:     <unset>
+  RenewTime:       Tue, 05 Dec 2023 14:30:17 -0500
+Conditions:
+  Type             Status  LastHeartbeatTime                 LastTransitionTime                Reason                       Message
+  ----             ------  -----------------                 ------------------                ------                       -------
+  MemoryPressure   False   Tue, 05 Dec 2023 14:27:00 -0500   Tue, 05 Dec 2023 14:06:04 -0500   KubeletHasSufficientMemory   kubelet has sufficient memory available
+  DiskPressure     False   Tue, 05 Dec 2023 14:27:00 -0500   Tue, 05 Dec 2023 14:06:04 -0500   KubeletHasNoDiskPressure     kubelet has no disk pressure
+  PIDPressure      False   Tue, 05 Dec 2023 14:27:00 -0500   Tue, 05 Dec 2023 14:06:04 -0500   KubeletHasSufficientPID      kubelet has sufficient PID available
+  Ready            True    Tue, 05 Dec 2023 14:27:00 -0500   Tue, 05 Dec 2023 14:06:25 -0500   KubeletReady                 kubelet is posting ready status
+Addresses:
+  InternalIP:   10.0.176.225
+  InternalDNS:  ip-10-0-176-225.us-east-2.compute.internal
+  Hostname:     ip-10-0-176-225.us-east-2.compute.internal
+Capacity:
+  cpu:                4
+  ephemeral-storage:  83873772Ki
+  hugepages-1Gi:      0
+  hugepages-2Mi:      0
+  memory:             15985120Ki
+  pods:               58
+Allocatable:
+  cpu:                3920m
+  ephemeral-storage:  76224326324
+  hugepages-1Gi:      0
+  hugepages-2Mi:      0
+  memory:             14968288Ki
+  pods:               58
+System Info:
+  Machine ID:                 ec2d6b4d45a650e6c39478cc652025e1
+  System UUID:                ec2d6b4d-45a6-50e6-c394-78cc652025e1
+  Boot ID:                    0ce1f2bd-658e-4e79-9434-e4dd0bfb3ca9
+  Kernel Version:             5.10.186-179.751.amzn2.x86_64
+  OS Image:                   Amazon Linux 2
+  Operating System:           linux
+  Architecture:               amd64
+  Container Runtime Version:  containerd://1.6.19
+  Kubelet Version:            v1.27.4-eks-8ccc7ba
+  Kube-Proxy Version:         v1.27.4-eks-8ccc7ba
+ProviderID:                   aws:///us-east-2c/i-032b04e0fe98ad6d9
+Non-terminated Pods:          (2 in total)
+  Namespace                   Name                CPU Requests  CPU Limits  Memory Requests  Memory Limits  Age
+  ---------                   ----                ------------  ----------  ---------------  -------------  ---
+  kube-system                 aws-node-shmhx      25m (0%)      0 (0%)      0 (0%)           0 (0%)         24m
+  kube-system                 kube-proxy-jlfc8    100m (2%)     0 (0%)      0 (0%)           0 (0%)         24m
+Allocated resources:
+  (Total limits may be over 100 percent, i.e., overcommitted.)
+  Resource           Requests   Limits
+  --------           --------   ------
+  cpu                125m (3%)  0 (0%)
+  memory             0 (0%)     0 (0%)
+  ephemeral-storage  0 (0%)     0 (0%)
+  hugepages-1Gi      0 (0%)     0 (0%)
+  hugepages-2Mi      0 (0%)     0 (0%)
+Events:
+  Type     Reason                   Age                From                   Message
+  ----     ------                   ----               ----                   -------
+  Normal   Starting                 24m                kube-proxy             
+  Normal   Starting                 24m                kubelet                Starting kubelet.
+  Warning  InvalidDiskCapacity      24m                kubelet                invalid capacity 0 on image filesystem
+  Normal   NodeHasSufficientMemory  24m (x2 over 24m)  kubelet                Node ip-10-0-176-225.us-east-2.compute.internal status is now: NodeHasSufficientMemory
+  Normal   NodeHasNoDiskPressure    24m (x2 over 24m)  kubelet                Node ip-10-0-176-225.us-east-2.compute.internal status is now: NodeHasNoDiskPressure
+  Normal   NodeHasSufficientPID     24m (x2 over 24m)  kubelet                Node ip-10-0-176-225.us-east-2.compute.internal status is now: NodeHasSufficientPID
+  Normal   NodeAllocatableEnforced  24m                kubelet                Updated Node Allocatable limit across pods
+  Normal   Synced                   24m                cloud-node-controller  Node synced successfully
+  Normal   RegisteredNode           24m                node-controller        Node ip-10-0-176-225.us-east-2.compute.internal event: Registered Node ip-10-0-176-225.us-east-2.compute.internal in Controller
+  Normal   NodeReady                23m                kubelet                Node ip-10-0-176-225.us-east-2.compute.internal status is now: NodeReady

@@ -1,0 +1,22 @@
+Name:         nginx-ingress-nginx-controller
+Namespace:    default
+Labels:       app.kubernetes.io/component=controller
+              app.kubernetes.io/instance=nginx
+              app.kubernetes.io/managed-by=Helm
+              app.kubernetes.io/name=ingress-nginx
+              app.kubernetes.io/part-of=ingress-nginx
+              app.kubernetes.io/version=1.7.0
+              helm.sh/chart=ingress-nginx-4.6.0
+Annotations:  meta.helm.sh/release-name: nginx
+              meta.helm.sh/release-namespace: default
+
+Data
+====
+allow-snippet-annotations:
+----
+true
+
+BinaryData
+====
+
+Events:  <none>

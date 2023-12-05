@@ -1,0 +1,92 @@
+2023-12-04 18:10:52 Creating bundle directory
+2023-12-04 18:10:52 Bundle directory is: namespace-default_context-aws_2023-12-04_18-10-52
+2023-12-04 18:10:52 Getting other meta information
+2023-12-04 18:10:57 Getting pods, deployments, services, secrets, configmaps, and nodes in context and namespace
+2023-12-04 18:11:02 Getting kubectl get output for pods, deployments, services, secrets, configmaps, and nodes
+2023-12-04 18:11:07 Getting describes and yaml for pods
+2023-12-04 18:11:23 Getting describes and yaml for deployments
+2023-12-04 18:11:39 Getting describes and yaml for services
+2023-12-04 18:12:01 Getting describes and yaml for secrets
+2023-12-04 18:12:47 Getting describes and yaml for configmaps
+2023-12-04 18:12:57 Getting describes and yaml for nodes
+2023-12-04 18:13:02 Pods we will be collecting information against: 
+certmanager-cert-manager-5f77cf4598-fcbd9
+certmanager-cert-manager-cainjector-558bf5b55d-5vj7p
+certmanager-cert-manager-webhook-74b6ddbb48-5zr8r
+coordinator-9b999cd76-5sndp
+externaldns-external-dns-656c894cb-98g6b
+hive-566c674cc9-7ljr6
+nginx-ingress-nginx-controller-6547cdd79b-qx8xm
+ranger-7855c458d8-dqqbr
+worker-5d58dd7855-m9fw5
+2023-12-04 18:13:02 Getting logs for pod: 
+certmanager-cert-manager-5f77cf4598-fcbd9
+2023-12-04 18:13:03 Containers in pod certmanager-cert-manager-5f77cf4598-fcbd9:
+2023-12-04 18:13:03 cert-manager-controller
+2023-12-04 18:13:03 Getting logs for container: 
+cert-manager-controller
+2023-12-04 18:13:04 Log collected for container: cert-manager-controller and saved to: namespace-default_context-aws_2023-12-04_18-10-52/logs/certmanager-cert-manager-5f77cf4598-fcbd9-cert-manager-controller.2023-12-04_18-13-03.log
+2023-12-04 18:13:04 Getting logs for pod: 
+certmanager-cert-manager-cainjector-558bf5b55d-5vj7p
+2023-12-04 18:13:04 Containers in pod certmanager-cert-manager-cainjector-558bf5b55d-5vj7p:
+2023-12-04 18:13:04 cert-manager-cainjector
+2023-12-04 18:13:04 Getting logs for container: 
+cert-manager-cainjector
+2023-12-04 18:13:05 Log collected for container: cert-manager-cainjector and saved to: namespace-default_context-aws_2023-12-04_18-10-52/logs/certmanager-cert-manager-cainjector-558bf5b55d-5vj7p-cert-manager-cainjector.2023-12-04_18-13-04.log
+2023-12-04 18:13:05 Getting logs for pod: 
+certmanager-cert-manager-webhook-74b6ddbb48-5zr8r
+2023-12-04 18:13:06 Containers in pod certmanager-cert-manager-webhook-74b6ddbb48-5zr8r:
+2023-12-04 18:13:06 cert-manager-webhook
+2023-12-04 18:13:06 Getting logs for container: 
+cert-manager-webhook
+2023-12-04 18:13:07 Log collected for container: cert-manager-webhook and saved to: namespace-default_context-aws_2023-12-04_18-10-52/logs/certmanager-cert-manager-webhook-74b6ddbb48-5zr8r-cert-manager-webhook.2023-12-04_18-13-06.log
+2023-12-04 18:13:07 Getting logs for pod: 
+coordinator-9b999cd76-5sndp
+2023-12-04 18:13:07 Containers in pod coordinator-9b999cd76-5sndp:
+2023-12-04 18:13:07 starburst-enterprise-init
+2023-12-04 18:13:07 coordinator
+2023-12-04 18:13:07 Getting logs for container: 
+starburst-enterprise-init
+2023-12-04 18:13:08 Log collected for container: starburst-enterprise-init and saved to: namespace-default_context-aws_2023-12-04_18-10-52/logs/coordinator-9b999cd76-5sndp-starburst-enterprise-init.2023-12-04_18-13-07.log
+2023-12-04 18:13:08 Getting logs for container: 
+coordinator
+2023-12-04 18:13:09 Log collected for container: coordinator and saved to: namespace-default_context-aws_2023-12-04_18-10-52/logs/coordinator-9b999cd76-5sndp-coordinator.2023-12-04_18-13-08.log
+2023-12-04 18:13:09 Getting logs for pod: 
+externaldns-external-dns-656c894cb-98g6b
+2023-12-04 18:13:10 Containers in pod externaldns-external-dns-656c894cb-98g6b:
+2023-12-04 18:13:10 external-dns
+2023-12-04 18:13:10 Getting logs for container: 
+external-dns
+2023-12-04 18:13:11 Log collected for container: external-dns and saved to: namespace-default_context-aws_2023-12-04_18-10-52/logs/externaldns-external-dns-656c894cb-98g6b-external-dns.2023-12-04_18-13-10.log
+2023-12-04 18:13:11 Getting logs for pod: 
+hive-566c674cc9-7ljr6
+2023-12-04 18:13:12 Containers in pod hive-566c674cc9-7ljr6:
+2023-12-04 18:13:12 hive
+2023-12-04 18:13:12 Getting logs for container: 
+hive
+2023-12-04 18:13:12 Log collected for container: hive and saved to: namespace-default_context-aws_2023-12-04_18-10-52/logs/hive-566c674cc9-7ljr6-hive.2023-12-04_18-13-12.log
+2023-12-04 18:13:12 Getting logs for pod: 
+nginx-ingress-nginx-controller-6547cdd79b-qx8xm
+2023-12-04 18:13:13 Containers in pod nginx-ingress-nginx-controller-6547cdd79b-qx8xm:
+2023-12-04 18:13:13 controller
+2023-12-04 18:13:13 Getting logs for container: 
+controller
+2023-12-04 18:13:14 Log collected for container: controller and saved to: namespace-default_context-aws_2023-12-04_18-10-52/logs/nginx-ingress-nginx-controller-6547cdd79b-qx8xm-controller.2023-12-04_18-13-13.log
+2023-12-04 18:13:14 Getting logs for pod: 
+ranger-7855c458d8-dqqbr
+2023-12-04 18:13:15 Containers in pod ranger-7855c458d8-dqqbr:
+2023-12-04 18:13:15 ranger-admin
+2023-12-04 18:13:15 Getting logs for container: 
+ranger-admin
+2023-12-04 18:13:16 Log collected for container: ranger-admin and saved to: namespace-default_context-aws_2023-12-04_18-10-52/logs/ranger-7855c458d8-dqqbr-ranger-admin.2023-12-04_18-13-15.log
+2023-12-04 18:13:16 Getting logs for pod: 
+worker-5d58dd7855-m9fw5
+2023-12-04 18:13:16 Containers in pod worker-5d58dd7855-m9fw5:
+2023-12-04 18:13:16 starburst-enterprise-init
+2023-12-04 18:13:16 worker
+2023-12-04 18:13:16 Getting logs for container: 
+starburst-enterprise-init
+2023-12-04 18:13:17 Log collected for container: starburst-enterprise-init and saved to: namespace-default_context-aws_2023-12-04_18-10-52/logs/worker-5d58dd7855-m9fw5-starburst-enterprise-init.2023-12-04_18-13-16.log
+2023-12-04 18:13:17 Getting logs for container: 
+worker
+2023-12-04 18:13:18 Log collected for container: worker and saved to: namespace-default_context-aws_2023-12-04_18-10-52/logs/worker-5d58dd7855-m9fw5-worker.2023-12-04_18-13-17.log

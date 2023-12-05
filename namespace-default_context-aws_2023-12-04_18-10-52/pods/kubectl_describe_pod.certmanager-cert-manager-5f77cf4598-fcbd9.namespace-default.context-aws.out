@@ -1,0 +1,63 @@
+Name:             certmanager-cert-manager-5f77cf4598-fcbd9
+Namespace:        default
+Priority:         0
+Service Account:  certmanager-cert-manager
+Node:             ip-10-0-189-79.us-east-2.compute.internal/10.0.189.79
+Start Time:       Mon, 04 Dec 2023 17:02:21 -0500
+Labels:           app=cert-manager
+                  app.kubernetes.io/component=controller
+                  app.kubernetes.io/instance=certmanager
+                  app.kubernetes.io/managed-by=Helm
+                  app.kubernetes.io/name=cert-manager
+                  app.kubernetes.io/version=v1.11.1
+                  helm.sh/chart=cert-manager-v1.11.1
+                  pod-template-hash=5f77cf4598
+Annotations:      prometheus.io/path: /metrics
+                  prometheus.io/port: 9402
+                  prometheus.io/scrape: true
+Status:           Running
+SeccompProfile:   RuntimeDefault
+IP:               10.0.182.56
+IPs:
+  IP:           10.0.182.56
+Controlled By:  ReplicaSet/certmanager-cert-manager-5f77cf4598
+Containers:
+  cert-manager-controller:
+    Container ID:  containerd://1d209f7946f2fd1d1fbeb06e0e57a69c780d70e064a086ed7aeed5fb5f70d7cd
+    Image:         quay.io/jetstack/cert-manager-controller:v1.11.1
+    Image ID:      quay.io/jetstack/cert-manager-controller@sha256:4f1782c8316f34aae6b9ab823c3e6b7e6e4d92ec5dac21de6a17c3da44c364f1
+    Port:          9402/TCP
+    Host Port:     0/TCP
+    Args:
+      --v=2
+      --cluster-resource-namespace=$(POD_NAMESPACE)
+      --leader-election-namespace=kube-system
+      --acme-http01-solver-image=quay.io/jetstack/cert-manager-acmesolver:v1.11.1
+      --max-concurrent-challenges=60
+    State:          Running
+      Started:      Mon, 04 Dec 2023 17:02:33 -0500
+    Ready:          True
+    Restart Count:  0
+    Environment:
+      POD_NAMESPACE:  default (v1:metadata.namespace)
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-z8465 (ro)
+Conditions:
+  Type              Status
+  Initialized       True 
+  Ready             True 
+  ContainersReady   True 
+  PodScheduled      True 
+Volumes:
+  kube-api-access-z8465:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              kubernetes.io/os=linux
+Tolerations:                 kubernetes.azure.com/scalesetpriority=spot:NoSchedule
+                             node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:                      <none>

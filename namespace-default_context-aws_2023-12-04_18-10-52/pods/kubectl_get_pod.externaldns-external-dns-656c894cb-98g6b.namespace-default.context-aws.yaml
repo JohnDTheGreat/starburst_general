@@ -1,0 +1,173 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    prometheus.io/port: "7979"
+    prometheus.io/scrape: "true"
+  creationTimestamp: "2023-12-04T22:00:27Z"
+  generateName: externaldns-external-dns-656c894cb-
+  labels:
+    app.kubernetes.io/instance: externaldns
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: external-dns
+    helm.sh/chart: external-dns-6.17.0
+    pod-template-hash: 656c894cb
+  name: externaldns-external-dns-656c894cb-98g6b
+  namespace: default
+  ownerReferences:
+  - apiVersion: apps/v1
+    blockOwnerDeletion: true
+    controller: true
+    kind: ReplicaSet
+    name: externaldns-external-dns-656c894cb
+    uid: 31fb9b59-041e-4f3b-a0dd-63776ceeda5d
+  resourceVersion: "42728219"
+  uid: c4b74c35-d23b-48c4-aa25-0dfd772b0233
+spec:
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: apps
+            operator: In
+            values:
+            - base
+  containers:
+  - args:
+    - --metrics-address=:7979
+    - --log-level=info
+    - --log-format=text
+    - --events
+    - --zone-id-filter=Z05935543QLG4U69BL0K9
+    - --policy=sync
+    - --provider=aws
+    - --registry=txt
+    - --interval=10m
+    - --txt-owner-id=johndee-burks-lab01-us-east-2.enablement.starburstdata.net
+    - --txt-prefix=johndee-burks-lab01-us-east-2.enablement.starburstdata.net
+    - --source=service
+    - --source=ingress
+    - --aws-api-retries=3
+    - --aws-zone-type=public
+    - --aws-batch-change-size=1000
+    env:
+    - name: AWS_DEFAULT_REGION
+      value: us-east-2
+    image: docker.io/bitnami/external-dns:0.13.4-debian-11-r2
+    imagePullPolicy: IfNotPresent
+    livenessProbe:
+      failureThreshold: 2
+      httpGet:
+        path: /healthz
+        port: http
+        scheme: HTTP
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 5
+    name: external-dns
+    ports:
+    - containerPort: 7979
+      name: http
+      protocol: TCP
+    readinessProbe:
+      failureThreshold: 6
+      httpGet:
+        path: /healthz
+        port: http
+        scheme: HTTP
+      initialDelaySeconds: 5
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 5
+    resources: {}
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: kube-api-access-7684j
+      readOnly: true
+  dnsPolicy: ClusterFirst
+  enableServiceLinks: true
+  nodeName: ip-10-0-189-79.us-east-2.compute.internal
+  preemptionPolicy: PreemptLowerPriority
+  priority: 0
+  restartPolicy: Always
+  schedulerName: default-scheduler
+  securityContext:
+    fsGroup: 1001
+    runAsNonRoot: true
+    runAsUser: 1001
+  serviceAccount: externaldns-external-dns
+  serviceAccountName: externaldns-external-dns
+  terminationGracePeriodSeconds: 30
+  tolerations:
+  - effect: NoSchedule
+    key: kubernetes.azure.com/scalesetpriority
+    operator: Equal
+    value: spot
+  - effect: NoExecute
+    key: node.kubernetes.io/not-ready
+    operator: Exists
+    tolerationSeconds: 300
+  - effect: NoExecute
+    key: node.kubernetes.io/unreachable
+    operator: Exists
+    tolerationSeconds: 300
+  volumes:
+  - name: kube-api-access-7684j
+    projected:
+      defaultMode: 420
+      sources:
+      - serviceAccountToken:
+          expirationSeconds: 3607
+          path: token
+      - configMap:
+          items:
+          - key: ca.crt
+            path: ca.crt
+          name: kube-root-ca.crt
+      - downwardAPI:
+          items:
+          - fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+            path: namespace
+status:
+  conditions:
+  - lastProbeTime: null
+    lastTransitionTime: "2023-12-04T22:02:21Z"
+    status: "True"
+    type: Initialized
+  - lastProbeTime: null
+    lastTransitionTime: "2023-12-04T22:03:01Z"
+    status: "True"
+    type: Ready
+  - lastProbeTime: null
+    lastTransitionTime: "2023-12-04T22:03:01Z"
+    status: "True"
+    type: ContainersReady
+  - lastProbeTime: null
+    lastTransitionTime: "2023-12-04T22:02:21Z"
+    status: "True"
+    type: PodScheduled
+  containerStatuses:
+  - containerID: containerd://d1e2bfe54d999871a80a58020dde1d563524da6583efacbe5a85c43b220852bb
+    image: docker.io/bitnami/external-dns:0.13.4-debian-11-r2
+    imageID: docker.io/bitnami/external-dns@sha256:ee6349340fb638debfb4f29d1f7e9af1f64ef3aed2314c1df346f037c2b0eeb4
+    lastState: {}
+    name: external-dns
+    ready: true
+    restartCount: 0
+    started: true
+    state:
+      running:
+        startedAt: "2023-12-04T22:02:52Z"
+  hostIP: 10.0.189.79
+  phase: Running
+  podIP: 10.0.183.238
+  podIPs:
+  - ip: 10.0.183.238
+  qosClass: BestEffort
+  startTime: "2023-12-04T22:02:21Z"

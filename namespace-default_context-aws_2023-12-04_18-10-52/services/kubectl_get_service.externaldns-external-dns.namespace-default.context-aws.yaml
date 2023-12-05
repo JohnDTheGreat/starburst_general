@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    meta.helm.sh/release-name: externaldns
+    meta.helm.sh/release-namespace: default
+  creationTimestamp: "2023-08-01T15:37:17Z"
+  labels:
+    app.kubernetes.io/instance: externaldns
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: external-dns
+    helm.sh/chart: external-dns-6.17.0
+  name: externaldns-external-dns
+  namespace: default
+  resourceVersion: "16024871"
+  uid: d71d4b37-1261-4f15-b8da-81d909b9e397
+spec:
+  clusterIP: 172.20.199.20
+  clusterIPs:
+  - 172.20.199.20
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: http
+    port: 7979
+    protocol: TCP
+    targetPort: http
+  selector:
+    app.kubernetes.io/instance: externaldns
+    app.kubernetes.io/name: external-dns
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}

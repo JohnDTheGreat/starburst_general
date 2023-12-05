@@ -1,0 +1,19 @@
+Name:              externaldns-external-dns
+Namespace:         default
+Labels:            app.kubernetes.io/instance=externaldns
+                   app.kubernetes.io/managed-by=Helm
+                   app.kubernetes.io/name=external-dns
+                   helm.sh/chart=external-dns-6.17.0
+Annotations:       meta.helm.sh/release-name: externaldns
+                   meta.helm.sh/release-namespace: default
+Selector:          app.kubernetes.io/instance=externaldns,app.kubernetes.io/name=external-dns
+Type:              ClusterIP
+IP Family Policy:  SingleStack
+IP Families:       IPv4
+IP:                172.20.199.20
+IPs:               172.20.199.20
+Port:              http  7979/TCP
+TargetPort:        http/TCP
+Endpoints:         10.0.183.238:7979
+Session Affinity:  None
+Events:            <none>

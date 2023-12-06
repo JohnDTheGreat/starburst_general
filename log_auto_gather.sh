@@ -1,43 +1,99 @@
 #!/bin/bash
 
-# This script will gather logs from all pods in a given namespace and context
+# This script will gather logs from pods, services, deployments, secrets, configmaps, and nodes
+# It will also get information about docker containers
 # It will then tar and gzip the logs and place them in the current directory
+
+
 
 # Initialize variables
 K8CONTEXT=""
 K8NAMESPACE=""
+CONTAINERID=""
+DOCKERCOLLECT="false"
+DOCKERCOLLECTFILE="false"
 # For testing
 # K8CONTEXT="aws"
 # K8NAMESPACE="default"
 
-#Get input from command line options to set variables
-while getopts ":c:n:h" opt; do
-  case $opt in
-    c) K8CONTEXT="$OPTARG"
-    ;;
-    n) K8NAMESPACE="$OPTARG"
-    ;;
-    h) echo "Usage: log_auto_gather.sh -c <kubernetes context> -n <kubernetes namespace>"
-    exit 1
-    ;;
-    \?) echo "Invalid option -$OPTARG" >&2
-    echo "Usage: log_auto_gather.sh -c <kubernetes context> -n <kubernetes namespace>"
-    exit 1
-    ;;
-  esac
-done
+# Create variable for usage
+__usage="
+Usage: $0 [OPTIONS]
 
-# Check if variables are set
-if [ -z "$K8CONTEXT" ]; then
-  echo "kubernetes context is unset"
-  echo "Please enter a context with the -c option"
+Options:
+  -c,  --context                kubectl context optional
+  -n,  --namespace              kubectl namespace optional
+  -h,  --help                   print this help message
+  -d,  --docker                 enabled docker log collection using docker logs
+  -f,  --dockerfile             enabled docker log collection using docker inspect
+  -i,  --containerid            docker container id optional
+"
+
+# Check if arguments are given if not print usage and exit
+if [ $# -eq 0 ]; then
+  echo "$__usage"
   exit 1
 fi
 
+# Get input from short and long command line options to set variables
+# If no input is given for context or namespace then the current context and namespace will be used
+while [ "$1" != "" ]; do
+  case $1 in
+    -c | --context )            shift
+                                K8CONTEXT=$1
+                                ;;
+    -n | --namespace )          shift
+                                K8NAMESPACE=$1
+                                ;;
+    -d | --docker )             DOCKERCOLLECT="true"
+                                ;;
+    -f | --dockerfile )         DOCKERCOLLECTFILE="true"
+                                ;;
+    -i | --containerid )        shift
+                                CONTAINERID=$1
+                                ;;
+    -h | --help )               echo "$__usage"
+                                exit 1
+                                ;;
+    * )                         echo "Invalid syntax"; echo "$__usage"
+                                exit 1
+  esac
+  shift
+done
+
+
+# # Get input from command line options to set variables
+# while getopts ":c:n:h:d:f:i" opt; do
+#   case $opt in
+#     c) K8CONTEXT="$OPTARG"
+#     ;;
+#     n) K8NAMESPACE="$OPTARG"
+#     ;;
+#     d) DOCKERCOLLECT="true"
+#     ;;
+#     f) DOCKERCOLLECTFILE="true"
+#     ;;
+#     i) CONTAINERID="$OPTARG"
+#     ;;
+#     h) echo "$__usage"
+#     exit 1
+#     ;;
+#     \?) echo "Invalid option -$OPTARG" >&2
+#     echo "$__usage"
+#     exit 1
+#     ;;
+#   esac
+# done
+
+# Check if kubeconfig is set if not set to default
+if [ -z "$K8CONTEXT" ]; then
+  K8CONTEXT=$(kubectl config current-context)
+  echo "kubernetes context not set, using current context: $K8CONTEXT"
+fi
+
 if [ -z "$K8NAMESPACE" ]; then
-  echo "kubernetes namespace is unset"
-  echo "Please enter a namespace with the -n option"
-  exit 1
+  K8NAMESPACE="default"
+  echo "kubernetes namespace not set, using namespace: $K8NAMESPACE"
 fi
 
 # Function for printing message to stdout with preceding timestamp
@@ -57,14 +113,77 @@ CONFIGMAPSDIR="$BUNDLE/configmaps"
 NODEDIR="$BUNDLE/nodes"
 OTHER="$BUNDLE/other"
 LOGDIR="$BUNDLE/logs"
+DOCKERDIR="$BUNDLE/docker"
 print_msg "Bundle directory is: $BUNDLE"
 mkdir $BUNDLE $PODDIR $DEPLOYDIR $SERVICEDIR $SECRETSDIR $CONFIGMAPSDIR $NODEDIR $OTHER $LOGDIR
+
+# Check if DOCKERCOLLECT and DOCKERCOLLECTFILE are both set to true if so default to DOCKERCOLLECT
+if [ "$DOCKERCOLLECT" == "true" ] && [ "$DOCKERCOLLECTFILE" == "true" ]; then
+  print_msg "Both docker logs and docker file options were used, defaulting to docker logs option"
+  DOCKERCOLLECTFILE="false"
+fi
+
+# Check if docker option was used and if container id is set if not collect logs from all containers
+# Use docker logs command to get logs from container and save to file
+if [ "$DOCKERCOLLECT" == "true" ]; then
+  print_msg "docker option was used"
+  # Add docker directory to bundle
+  mkdir $DOCKERDIR
+  # Check if container id is set if it is collect logs from that container if not collect logs from all containers
+  if [ -z "$CONTAINERID" ]; then
+    print_msg "docker container id is unset, will collect docker logs from all containers"
+    CONTAINERID=$(docker ps -q)
+    print_msg "docker container ids: \n$CONTAINERID"
+    for container in $CONTAINERID
+    do
+      print_msg "Getting docker logs for container: $container"
+      FILENAME="$container.$(date +%Y-%m-%d_%H-%M-%S).log"
+      docker logs $container &> $DOCKERDIR/$FILENAME
+      print_msg "Docker logs collected for container: $container and saved to: $DOCKERDIR/$FILENAME"
+    done
+  fi
+  if [ -n "$CONTAINERID" ]; then
+    print_msg "docker container id is set, will collect docker logs from container: $CONTAINERID"
+    FILENAME="$CONTAINERID.$(date +%Y-%m-%d_%H-%M-%S).log"
+    docker logs $CONTAINERID &> $DOCKERDIR/$FILENAME
+    print_msg "Docker logs collected for container: $CONTAINERID and saved to: $DOCKERDIR/$FILENAME"
+  fi
+fi
+
+# Check if docker option was used and if container id is set if not collect logs from all containers
+# Use docker inspect command to get log path and copy the log file to the bundle directory
+if [ "$DOCKERCOLLECTFILE" == "true" ]; then
+  print_msg "docker option was used"
+  # Add docker directory to bundle
+  mkdir $DOCKERDIR
+  # Check if container id is set if it is collect logs from that container if not collect logs from all containers
+  if [ -z "$CONTAINERID" ]; then
+    print_msg "docker container id is unset, will collect docker logs from all containers"
+    CONTAINERID=$(docker ps -q)
+    print_msg "docker container ids: \n$CONTAINERID"
+    for container in $CONTAINERID
+    do
+      print_msg "Getting docker logs for container: $container"
+      FILENAME="$container.$(date +%Y-%m-%d).log"
+      LOGPATH=$(docker inspect -f {{.LogPath}} $container)
+      cp $LOGPATH $DOCKERDIR/$FILENAME
+      print_msg "Docker logs collected for container: $container and saved to: $DOCKERDIR/$FILENAME"
+    done
+  fi
+  if [ -n "$CONTAINERID" ]; then
+    print_msg "docker container id is set, will collect docker logs from container: $CONTAINERID"
+    FILENAME="$CONTAINERID.$(date +%Y-%m-%d).log"
+    LOGPATH=$(docker inspect -f {{.LogPath}} $CONTAINERID)
+    cp $LOGPATH $DOCKERDIR/$FILENAME
+    print_msg "Docker logs collected for container: $CONTAINERID and saved to: $DOCKERDIR/$FILENAME"
+  fi
+fi
 
 # Section for getting other meta information
 print_msg "Getting other meta information"
 kubectl version --context $K8CONTEXT &> $OTHER/kubectl_version.$K8CONTEXT.out
 kubectl cluster-info --context $K8CONTEXT &> $OTHER/kubectl_cluster_info.$K8CONTEXT.out
-kubectl get events --context $K8CONTEXT &> $OTHER/kubectl_get_events.$K8CONTEXT.out
+kubectl get events --context $K8CONTEXT -A &> $OTHER/kubectl_get_events.$K8CONTEXT.out
 kubectl get componentstatuses --context $K8CONTEXT &> $OTHER/kubectl_get_componentstatuses.$K8CONTEXT.out
 kubectl get all -o custom-columns=Kind:.kind,Name:.metadata.name,Finalizers:.metadata.finalizers \
 --all-namespaces --context $K8CONTEXT &> $OTHER/kubectl_finalizers.$K8CONTEXT.out

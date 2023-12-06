@@ -4,7 +4,10 @@
 # It will also get information about docker containers
 # It will then tar and gzip the logs and place them in the current directory
 
-
+# Function for printing message to stdout with preceding timestamp
+function print_msg {
+  printf "$(date +%Y-%m-%d" "%H:%M:%S) $1\n"
+}
 
 # Initialize variables
 K8CONTEXT=""
@@ -88,18 +91,13 @@ done
 # Check if kubeconfig is set if not set to default
 if [ -z "$K8CONTEXT" ]; then
   K8CONTEXT=$(kubectl config current-context)
-  echo "kubernetes context not set, using current context: $K8CONTEXT"
+  print_msg "kubernetes context not set, using current context: $K8CONTEXT"
 fi
 
 if [ -z "$K8NAMESPACE" ]; then
   K8NAMESPACE="default"
-  echo "kubernetes namespace not set, using namespace: $K8NAMESPACE"
+  print_msg "kubernetes namespace not set, using namespace: $K8NAMESPACE"
 fi
-
-# Function for printing message to stdout with preceding timestamp
-function print_msg {
-  printf "$(date +%Y-%m-%d" "%H:%M:%S) $1\n"
-}
 
 # Create directory to store bundle with K8NAMESPACE and K8CONTEXT and timestamp
 # Include directories for pods, deployments, services, secrets, configmaps, nodes and other
@@ -130,7 +128,12 @@ if [ "$DOCKERCOLLECT" == "true" ]; then
   # Add docker directory to bundle
   mkdir $DOCKERDIR
   # Check if container id is set if it is collect logs from that container if not collect logs from all containers
-  if [ -z "$CONTAINERID" ]; then
+  if [ -n "$CONTAINERID" ]; then
+    print_msg "docker container id is set, will collect docker logs from container: $CONTAINERID"
+    FILENAME="$CONTAINERID.$(date +%Y-%m-%d_%H-%M-%S).log"
+    docker logs $CONTAINERID &> $DOCKERDIR/$FILENAME
+    print_msg "Docker logs collected for container: $CONTAINERID and saved to: $DOCKERDIR/$FILENAME"
+  else
     print_msg "docker container id is unset, will collect docker logs from all containers"
     CONTAINERID=$(docker ps -q)
     print_msg "docker container ids: \n$CONTAINERID"
@@ -141,12 +144,6 @@ if [ "$DOCKERCOLLECT" == "true" ]; then
       docker logs $container &> $DOCKERDIR/$FILENAME
       print_msg "Docker logs collected for container: $container and saved to: $DOCKERDIR/$FILENAME"
     done
-  fi
-  if [ -n "$CONTAINERID" ]; then
-    print_msg "docker container id is set, will collect docker logs from container: $CONTAINERID"
-    FILENAME="$CONTAINERID.$(date +%Y-%m-%d_%H-%M-%S).log"
-    docker logs $CONTAINERID &> $DOCKERDIR/$FILENAME
-    print_msg "Docker logs collected for container: $CONTAINERID and saved to: $DOCKERDIR/$FILENAME"
   fi
 fi
 

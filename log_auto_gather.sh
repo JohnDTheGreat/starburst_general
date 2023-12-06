@@ -290,6 +290,10 @@ done
 print_msg "Tarring and gzipping bundle directory"
 tar -czvf $BUNDLE.tar.gz $BUNDLE
 print_msg "Bundle is packaged as file: $BUNDLE.tar.gz"
+print_msg "Removing bundle directory"
+rm -rf $BUNDLE
+print_msg "Bundle directory removed"
+print_msg "Done"
 
 
 

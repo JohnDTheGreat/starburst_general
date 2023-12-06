@@ -1,7 +1,0 @@
-NAME                               DATA   AGE
-certmanager-cert-manager-webhook   0      126d
-kube-root-ca.crt                   1      206d
-nginx-ingress-nginx-controller     1      126d
-scripts-configmap                  2      203d
-starburst-coordinator-p8s          1      7d21h
-starburst-worker-p8s               1      7d21h

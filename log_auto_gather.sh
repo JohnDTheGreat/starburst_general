@@ -10,6 +10,7 @@ function print_msg {
 }
 
 # Initialize variables
+VERSION="1.0.1"
 K8CONTEXT=""
 K8NAMESPACE=""
 CONTAINERID=""
@@ -30,6 +31,8 @@ Options:
   -d,  --docker                 enabled docker log collection using docker logs
   -f,  --dockerfile             enabled docker log collection using docker inspect
   -i,  --containerid            docker container id optional
+  -v,  --version                print version
+  -r,  --run                    run script with default options
 "
 
 # Check if arguments are given if not print usage and exit
@@ -58,6 +61,11 @@ while [ "$1" != "" ]; do
     -h | --help )               echo "$__usage"
                                 exit 1
                                 ;;
+    -v | --version )            echo $VERSION 
+                                exit 1
+                                ;;    
+    -r | --run )                echo "Running script with default options"
+                                ;;                  
     * )                         echo "Invalid syntax"; echo "$__usage"
                                 exit 1
   esac
@@ -112,8 +120,9 @@ NODEDIR="$BUNDLE/nodes"
 OTHER="$BUNDLE/other"
 LOGDIR="$BUNDLE/logs"
 DOCKERDIR="$BUNDLE/docker"
+QUOTADIR="$BUNDLE/quota"
 print_msg "Bundle directory is: $BUNDLE"
-mkdir $BUNDLE $PODDIR $DEPLOYDIR $SERVICEDIR $SECRETSDIR $CONFIGMAPSDIR $NODEDIR $OTHER $LOGDIR
+mkdir $BUNDLE $PODDIR $DEPLOYDIR $SERVICEDIR $SECRETSDIR $CONFIGMAPSDIR $NODEDIR $OTHER $LOGDIR $QUOTADIR
 
 # Check if DOCKERCOLLECT and DOCKERCOLLECTFILE are both set to true if so default to DOCKERCOLLECT
 if [ "$DOCKERCOLLECT" == "true" ] && [ "$DOCKERCOLLECTFILE" == "true" ]; then
@@ -185,7 +194,7 @@ kubectl get componentstatuses --context $K8CONTEXT &> $OTHER/kubectl_get_compone
 kubectl get all -o custom-columns=Kind:.kind,Name:.metadata.name,Finalizers:.metadata.finalizers \
 --all-namespaces --context $K8CONTEXT &> $OTHER/kubectl_finalizers.$K8CONTEXT.out
 
-# Get pods, deployments, services, secrets, configmaps, and nodes in context and namespace
+# Get pods, deployments, services, secrets, configmaps, quotas, and nodes in context and namespace
 print_msg "Getting pods, deployments, services, secrets, configmaps, and nodes in context and namespace"
 PODS=$(kubectl get pods -n $K8NAMESPACE --context $K8CONTEXT | awk 'NR>1 {print $1}')
 DEPLOYMENTS=$(kubectl get deployments -n $K8NAMESPACE --context $K8CONTEXT | awk 'NR>1 {print $1}')
@@ -193,17 +202,19 @@ SERVICES=$(kubectl get services -n $K8NAMESPACE --context $K8CONTEXT | awk 'NR>1
 SECRETS=$(kubectl get secrets -n $K8NAMESPACE --context $K8CONTEXT | awk 'NR>1 {print $1}')
 CONFIGMAPS=$(kubectl get configmaps -n $K8NAMESPACE --context $K8CONTEXT | awk 'NR>1 {print $1}')
 NODES=$(kubectl get nodes --context $K8CONTEXT | awk 'NR>1 {print $1}')
+QUOTAS=$(kubectl get quota -n $K8NAMESPACE --context $K8CONTEXT | awk 'NR>1 {print $1}')
 
-# Get kubectl get output for pods, deployments, services, secrets, configmaps, and nodes
-print_msg "Getting kubectl get output for pods, deployments, services, secrets, configmaps, and nodes"
+# Get kubectl get output for pods, deployments, services, secrets, configmaps, quotas and nodes
+print_msg "Getting kubectl get output for pods, deployments, services, secrets, configmaps, quotas and nodes"
 kubectl get pods -n $K8NAMESPACE --context $K8CONTEXT -o wide &> $PODDIR/kubectl_get_pods.namespace-$K8NAMESPACE.context-$K8CONTEXT.out
 kubectl get deployments -n $K8NAMESPACE --context $K8CONTEXT -o wide &> $DEPLOYDIR/kubectl_get_deployments.namespace-$K8NAMESPACE.context-$K8CONTEXT.out
 kubectl get services -n $K8NAMESPACE --context $K8CONTEXT -o wide &> $SERVICEDIR/kubectl_get_services.namespace-$K8NAMESPACE.context-$K8CONTEXT.out
 kubectl get secrets -n $K8NAMESPACE --context $K8CONTEXT -o wide &> $SECRETSDIR/kubectl_get_secrets.namespace-$K8NAMESPACE.context-$K8CONTEXT.out
 kubectl get configmaps -n $K8NAMESPACE --context $K8CONTEXT -o wide &> $CONFIGMAPSDIR/kubectl_get_configmaps.namespace-$K8NAMESPACE.context-$K8CONTEXT.out
 kubectl get nodes --context $K8CONTEXT -o wide &> $NODEDIR/kubectl_get_nodes.context-$K8CONTEXT.out
+kubectl get quota -n $K8NAMESPACE --context $K8CONTEXT -o wide &> $QUOTADIR/kubectl_get_quota.namespace-$K8NAMESPACE.context-$K8CONTEXT.out
 
-# Get kubectl describe and yaml output for pods, deployments, services, secrets, configmaps, and nodes individually
+# Get kubectl describe and yaml output for pods, deployments, services, secrets, configmaps, quotas and nodes individually
 # PODS
 print_msg "Getting describes and yaml for pods"
 for pod in $PODS
@@ -257,6 +268,15 @@ do
   &> $NODEDIR/kubectl_describe_node.$node.context-$K8CONTEXT.out
   kubectl get node $node --context $K8CONTEXT -o yaml \
   &> $NODEDIR/kubectl_get_node.$node.context-$K8CONTEXT.yaml
+done
+# QUOTAS
+print_msg "Getting describes and yaml for quotas"
+for quota in $QUOTAS
+do
+  kubectl describe quota $quota -n $K8NAMESPACE --context $K8CONTEXT \
+  &> $QUOTADIR/kubectl_describe_quota.$quota.namespace-$K8NAMESPACE.context-$K8CONTEXT.out
+  kubectl get quota $quota -n $K8NAMESPACE --context $K8CONTEXT -o yaml \
+  &> $QUOTADIR/kubectl_get_quota.$quota.namespace-$K8NAMESPACE.context-$K8CONTEXT.yaml
 done
 
 # # For testing

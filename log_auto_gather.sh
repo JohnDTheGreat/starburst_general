@@ -72,30 +72,6 @@ while [ "$1" != "" ]; do
   shift
 done
 
-
-# # Get input from command line options to set variables
-# while getopts ":c:n:h:d:f:i" opt; do
-#   case $opt in
-#     c) K8CONTEXT="$OPTARG"
-#     ;;
-#     n) K8NAMESPACE="$OPTARG"
-#     ;;
-#     d) DOCKERCOLLECT="true"
-#     ;;
-#     f) DOCKERCOLLECTFILE="true"
-#     ;;
-#     i) CONTAINERID="$OPTARG"
-#     ;;
-#     h) echo "$__usage"
-#     exit 1
-#     ;;
-#     \?) echo "Invalid option -$OPTARG" >&2
-#     echo "$__usage"
-#     exit 1
-#     ;;
-#   esac
-# done
-
 # Check if kubeconfig is set if not set to default
 if [ -z "$K8CONTEXT" ]; then
   K8CONTEXT=$(kubectl config current-context)

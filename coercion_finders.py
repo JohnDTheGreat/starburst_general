@@ -216,12 +216,12 @@ def dry_run_true():
 def dry_run_false():
     
     # # Hard code for testing
-    # username, password, catalog, host, port = ("starburst_service", 
-    #                                            "StarburstR0cks!", 
-    #                                            "hive", 
-    #                                            "ae34a34a332074136a033a3d4c3d3f42-1365266388.us-east-2.elb.amazonaws.com", 
+    # username, password, catalog, host, port = ("user", 
+    #                                            "password", 
+    #                                            "catalog", 
+    #                                            "hostname", 
     #                                            8443)
-    # csv_file = "/Users/johndee.burks/Accounts/Sunlife/test.csv"
+    # csv_file = "path/to/csv/file.csv"
 
     # Get username and password
     username, password = get_username_password()
